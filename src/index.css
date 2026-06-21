@@ -8,3 +8,7 @@
   --font-plus: "Plus Jakarta Sans", sans-serif;
   --font-inter: "Inter", sans-serif;
 }
+
+html {
+  overflow-y: scroll;
+}
