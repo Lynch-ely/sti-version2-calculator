@@ -4,6 +4,9 @@ import { MdOutlineLightMode } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { FaAngleUp } from "react-icons/fa";
 import { FaAngleDown } from "react-icons/fa";
+import { HiInformationCircle } from "react-icons/hi";
+import { MdDeleteOutline } from "react-icons/md";
+import { MdAddCircleOutline } from "react-icons/md";
 import Footer from "./Footer";
 
 export default function GWACalculator() {
@@ -120,6 +123,14 @@ export default function GWACalculator() {
     setFinals('');
   };
 
+  const [finalGradeInput, setFinalGradeInput] = useState('') ;
+  const [unitsInput, setUnitsInput] = useState('') ;
+
+  const deleteGWA = () => {
+    setFinalGradeInput('');
+    setUnitsInput('');
+  }
+
   return (
     <div className={`min-h-screen font-inter ${activeSwitch ? 'bg-[#0F1117]' : 'bg-[#f7f6f6]'} p-5 sm:p-0`}>
         <div className="max-w-2xl mx-auto space-y-6 pt-10">
@@ -152,7 +163,7 @@ export default function GWACalculator() {
             onClick={() => setActiveNav('Course GWA')}>COURSE GWA</button>
             <button className= {`h-9 rounded-lg flex justify-center items-center text-xs md:text-sm
             ${activeNav==='GWA' ? 'text-[#F5F5F5] bg-[#0072bc]' : 'bg-transparent text-[#6B7280] cursor-pointer'}`} 
-            onClick={() => setActiveNav('GWA')}>GWA</button>
+            onClick={() => setActiveNav('GWA')}>OVERALL GWA</button>
             <button className= {`h-9 rounded-lg flex justify-center items-center text-xs md:text-sm
             ${activeNav==='Cumulative GWA' ? 'text-[#F5F5F5] bg-[#0072bc]' : 'bg-transparent text-[#6B7280] cursor-pointer'}`} 
             onClick={() => setActiveNav('Cumulative GWA')}>CUMULATIVE GWA</button>
@@ -240,17 +251,62 @@ export default function GWACalculator() {
             <div className={` bg-[#FEFEFE] rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-5 space-y-3`}>
               <div className="flex justify-between">
                 <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Calculate your gwa:</h1>
-                <MdDelete onClick={deleteInput} className="hover:cursor-pointer hover:scale-110 transition-gpu duration-200 text-[#6B7280] hover:text-[#0072bc]"/> 
+                <HiInformationCircle className="text-xl hover:cursor-pointer hover:scale-110 transition-gpu duration-200 text-[#6B7280] hover:text-[#0072bc]"/> 
               </div>
-              <div className="flex flex-col gap-3">
-                <div className="bg-[#fefefe] rounded-lg p-3 border border-[#ECEDF1]">
-                  <h5 className="text-[#242F49] font-medium text-xs md:text-sm">Prelim (20%)</h5>
-                  <input
-                  type="number"
-                  placeholder="--"
-                  className="border-none outline-none text-xl md:text-2xl font-bold text-[#242F49] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                  ></input>
-                </div>
+              <div className="flex flex-col gap-3 text-center">
+                <table className="ring-1 rounded-lg ring-amber-300">
+                  <thead className="bg-amber-300">
+                    <tr className="">
+                      <th className="w-[30%] text-sm py-3 rounded-tl-lg font-semibold">COURSE</th>
+                      <th className="w-[30%] text-sm py-3 font-semibold">FINAL GRADE</th>
+                      <th className="w-[30%] text-sm py-3 font-semibold">UNITS</th>
+                      <th className="w-[5%] rounded-tr-lg"></th>
+                    </tr>
+                  </thead>
+                  <tbody className={`border-b border-slate-200`} onClick={deleteGWA}>
+                    <tr className="">
+                      <td className="py-2 text-sm font-medium">Course 1</td>
+                      <td className="py-3">
+                        <input 
+                        type="number" 
+                        placeholder="--"
+                        onChange={(e) => handleGradeChange(e.target.value, setFinalGradeInput)}
+                        className="w-4/5 rounded-lg px-4 py-1.5 outline-none text-md md:text-2xl font-bold text-center text-[#242F49] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
+                        border-2 border-[#e5e7eb] 
+                        focus:border-[#0072bc] align-middle
+                        "
+                        />
+                      </td>
+                      <td>
+                        <input 
+                        type="number" 
+                        placeholder="--"
+                        onChange={(e) => handleGradeChange(e.target.value, setUnitsInput)}
+                        className="w-4/5 rounded-lg px-4 py-1.5 outline-none text-md md:text-2xl font-bold text-center text-[#242F49] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
+                        border-2 border-[#e5e7eb] 
+                        focus:border-[#0072bc] align-middle
+                        "
+                        />
+                      </td>
+                      <td><MdDeleteOutline className="hover:cursor-pointer hover:scale-110 transition-gpu duration-200 text-[#6B7280]/60 hover:text-red-400" size={20}/> </td>
+                    </tr>
+                  </tbody>
+                  <tbody className="">
+                    <tr className="">
+                      <td colSoab={4} className="p-4 border-t border-slate-100">
+                        <button className="text-xs font-medium cursor-pointer flex gap-2">
+                          <MdAddCircleOutline size={20}/>
+                          <span className="text-sm font-sm">ADD COURSE</span>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div>
+                <button className="bg-amber-300 w-full py-3 rounded-lg font-bold tracking-widest text-md hover:bg-yellow-300">
+                  CALCULATE
+                </button>
               </div>
             </div>
           </section>
@@ -279,7 +335,7 @@ export default function GWACalculator() {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr className="hover:bg-[#fffdf5">
+                      <tr className="hover:bg-[#fffdf5]">
                         <td className="p-3 border-slate-200 border-b text-xs md:text-sm border-l">97.50 - 100</td>
                         <td className="p-3 border-slate-200 border-b text-xs md:text-sm text-center sm:text-left">1.00</td>
                         <td className="p-3 border-slate-200 border-b text-xs md:text-sm border-r">Excellent</td>
