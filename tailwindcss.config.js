@@ -1,21 +1,16 @@
-  import daisyui from "daisyui"
-  /** @type {import('tailwindcss').Config} */
+import daisyui from "daisyui";
 
-  export default {
-    content: [
-      "./app/**/*.{js,ts,jsx,tsx,mdx}",       // Next.js App Router
-      "./pages/**/*.{js,ts,jsx,tsx,mdx}",     // Next.js Pages Router
-      "./components/**/*.{js,ts,jsx,tsx,mdx}",// Components folder
-      "./src/**/*.{js,ts,jsx,tsx,mdx}",       // Src folder fallback
-    ],
-    theme: {
-      extend: {
-        fontFamily: {
-          poppins: ['Poppins', 'sans-serif'], 
-        },
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        poppins: ["Poppins", "sans-serif"],
       },
     },
-    plugins: [
-      daisyui
-    ],
-  }
+  },
+  plugins: [daisyui],
+};
