@@ -28,6 +28,7 @@ export default function GWACalculator() {
     setActiveArrow(!activeArrow);
   }
 
+  // COURSE GWA LOGIC
   function courseGWA(){
     if(!prelim || !midterm || !prefinal || !finals){
       return {percentage: "--", scale: "0.0", remark: "REMARK", color: "border-[#ECEDF1]"}
@@ -39,9 +40,9 @@ export default function GWACalculator() {
     let f = parseFloat(finals)|| 0;
 
     if (p > 100 || p < 0) p = 100;
-    if (m > 100 || p < 0) m = 100;
-    if (pf > 100 || p < 0) pf = 100;
-    if (f > 100 || p < 0) f = 100;
+    if (m > 100 || m < 0) m = 100;
+    if (pf > 100 || pf < 0) pf = 100;
+    if (f > 100 || f < 0) f = 100;
 
     const finalPercentage = (p * 0.2) + (m * 0.2) + (pf * 0.2) + (f * 0.4);
 
@@ -123,20 +124,81 @@ export default function GWACalculator() {
     setFinals('');
   };
 
-  const [finalGradeInput, setFinalGradeInput] = useState('') ;
-  const [unitsInput, setUnitsInput] = useState('') ;
+  // OVERALL GWA LOGIC
 
-  const deleteGWA = () => {
-    setFinalGradeInput('');
-    setUnitsInput('');
+  const initialCourses= [
+    { id: 1, name: 'Course 1', finalGrade: '', units: '' },
+    { id: 2, name: 'Course 2', finalGrade: '', units: '' },
+    { id: 3, name: 'Course 3', finalGrade: '', units: '' },
+  ];
+  
+  const [courses, setCourses] = useState(initialCourses);
+  const [overallGWA, setOverallGWA] = useState(null);
+  
+  function updateCourseField(id, field, value) {
+    setCourses((prev) => prev.map((course) => course.id === id ? { ...course, [field]: value } : course
+    )
+    );
   }
 
+  const deleteCourse = (id) => {
+    if (courses.length <= 1) return;
+    setCourses((prev) => prev.filter((course) => course.id !== id));
+  };
+
+  const addCourse = () => {
+    setCourses((prev) => {
+      const maxId = prev.length > 0 ? Math.max(...prev.map(c => c.id)) : 3;
+      const nextId = maxId + 1;
+
+      return [
+        ...prev,
+        { id: nextId, name: `Course ${nextId}`, finalGrade: '', units: '' },
+      ]
+    });
+  };
+  
+  function calculateOverallGWA(){
+    let totalGradePoints = 0;
+    let totalUnits = 0;
+    let allInputsValid = true;
+    
+    courses.forEach((course) => {
+      const grade = parseFloat(course.finalGrade);
+      const units = parseFloat(course.units);
+
+      if(isNaN(grade) || isNaN(units) || units <= 0){
+        return;
+      }else{
+        totalGradePoints += grade * units;
+        totalUnits += units;
+      };
+    });
+
+    if(!allInputsValid || totalUnits === 0){
+      allInputsValid = false;
+      return;
+    }
+
+    const finalGWA = totalGradePoints / totalUnits;
+    setOverallGWA(finalGWA.toFixed(2));
+  };
+
+  function clearAllCourses(){
+    setCourses(initialCourses);
+    setOverallGWA(null);
+  }
+
+  // PLACEHOLDER
+  const gradePlaceholder = ['1.00','1.25','1.50'];
+  const unitPlaceholder = '3';
+
   return (
-    <div className={`min-h-screen font-inter ${activeSwitch ? 'bg-[#0F1117]' : 'bg-[#f7f6f6]'} p-5 sm:p-0`}>
+    <div className={`min-h-screen font-inter ${activeSwitch ? 'bg-[#0F1117]' : 'bg-[#f7f9fb]'} p-5 sm:p-0`}>
         <div className="max-w-2xl mx-auto space-y-6 pt-10">
           {/* HEADER */}
           <div className="flex justify-center items-center w-full relative shadow-[0_20px_50px_rgba(0,0,0,0.03)] ">
-            <h1 className="text-[#0072bc] text-xl md:text-xl font-bold">STI GWA CALCULATOR</h1>
+            <h1 className="text-[#004481] text-xl md:text-xl font-bold">STI GWA CALCULATOR</h1>
 
             {/* TOGGLE SWITCH */}
             <div className={`absolute right-0 text-xl ${activeSwitch ? 'text-[#f5f5f5]' : 'text-black'}`}>
@@ -157,24 +219,27 @@ export default function GWACalculator() {
           </div> */}
 
           {/* NAV */}
-          <div className="w-full h-auto bg-[#fefefe] border border-[#0072bc]/10 rounded-lg grid grid-cols-3 text-xs sm:text-sm font-medium p-0.5 shadow-[0_20px_50px_rgba(0,0,0,0.03)]">
+          <div className="w-full h-auto bg-[#f2f4f6] rounded-lg grid grid-cols-3 text-xs sm:text-sm font-medium p-0.5 shadow-sm gap-1">
             <button className= {`h-9 rounded-lg flex justify-center items-center text-xs md:text-sm
-            ${activeNav==='Course GWA' ? 'text-[#F5F5F5] bg-[#0072bc]' : 'bg-transparent text-[#6B7280] cursor-pointer'}`} 
+            ${activeNav==='Course GWA' ? 'text-[#F5F5F5] bg-[#004481]' : 'bg-transparent text-[#414751]cursor-pointer hover:bg-[#e0e3e5]'}`} 
             onClick={() => setActiveNav('Course GWA')}>COURSE GWA</button>
             <button className= {`h-9 rounded-lg flex justify-center items-center text-xs md:text-sm
-            ${activeNav==='GWA' ? 'text-[#F5F5F5] bg-[#0072bc]' : 'bg-transparent text-[#6B7280] cursor-pointer'}`} 
+            ${activeNav==='GWA' ? 'text-[#F5F5F5] bg-[#004481]' : 'bg-transparent text-[#414751] cursor-pointer hover:bg-[#e0e3e5]'} `} 
             onClick={() => setActiveNav('GWA')}>OVERALL GWA</button>
             <button className= {`h-9 rounded-lg flex justify-center items-center text-xs md:text-sm
-            ${activeNav==='Cumulative GWA' ? 'text-[#F5F5F5] bg-[#0072bc]' : 'bg-transparent text-[#6B7280] cursor-pointer'}`} 
+            ${activeNav==='Cumulative GWA' ? 'text-[#F5F5F5] bg-[#004481]' : 'bg-transparent text-[#414751] cursor-pointer hover:bg-[#e0e3e5]'}`} 
             onClick={() => setActiveNav('Cumulative GWA')}>CUMULATIVE GWA</button>
           </div>
 
           {/* COURSE GRADE */}
           <section className={`${activeNav === 'Course GWA' ? 'block' : 'hidden'}`}>
-            <div className={` bg-[#FEFEFE] rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-5 space-y-3`}>
+            <div className={` bg-[#FEFEFE] rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-5 space-y-3 ${overallGWA != null ? 'flex' : 'hidden'}}`}>
               <div className="flex justify-between">
                 <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Enter Your Grade:</h1>
-                <MdDelete onClick={deleteInput} className="hover:cursor-pointer hover:scale-110 transition-gpu duration-200 text-[#6B7280] hover:text-[#0072bc]"/> 
+                <div className="flex gap-1 hover:cursor-pointer hover:scale-110 transition-gpu duration-200 text-[#6B7280] hover:text-[#ba1a1a]">
+                  <MdDelete onClick={deleteInput} size={15}/>
+                  <h5 className="text-xs font-inter font-medium uppercase tracking-wide">CLEAR ALL</h5>
+                </div> 
               </div>
               <div className="flex flex-col md:grid md:grid-cols-2 gap-3">
                 <div className="flex flex-col bg-[#fefefe] rounded-lg p-3 border border-[#ECEDF1] gap-1">
@@ -247,15 +312,15 @@ export default function GWACalculator() {
           </section>
           
           {/* GWA */}
-          <section className={`${activeNav === 'GWA' ? 'block' : 'hidden'}`}>
+          <section className={`${activeNav === 'GWA' ? 'block' : 'hidden'} font-hanken`}>
             <div className={` bg-[#FEFEFE] rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-5 space-y-3`}>
               <div className="flex justify-between">
                 <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Calculate your gwa:</h1>
                 <HiInformationCircle className="text-xl hover:cursor-pointer hover:scale-110 transition-gpu duration-200 text-[#6B7280] hover:text-[#0072bc]"/> 
               </div>
-              <div className="flex flex-col gap-3 text-center">
-                <table className="ring-1 rounded-lg ring-amber-300">
-                  <thead className="bg-amber-300">
+              <div className="flex flex-col gap-3 text-center max-h-110 overflow-hidden overflow-y-auto ">
+                <table className="rounded-lg">
+                  <thead className="bg-amber-300 text-[#6f5400] sticky top-0 z-10">
                     <tr className="">
                       <th className="w-[30%] text-sm py-3 rounded-tl-lg font-semibold">COURSE</th>
                       <th className="w-[30%] text-sm py-3 font-semibold">FINAL GRADE</th>
@@ -263,50 +328,75 @@ export default function GWACalculator() {
                       <th className="w-[5%] rounded-tr-lg"></th>
                     </tr>
                   </thead>
-                  <tbody className={`border-b border-slate-200`} onClick={deleteGWA}>
-                    <tr className="">
-                      <td className="py-2 text-sm font-medium">Course 1</td>
-                      <td className="py-3">
-                        <input 
-                        type="number" 
-                        placeholder="--"
-                        onChange={(e) => handleGradeChange(e.target.value, setFinalGradeInput)}
-                        className="w-4/5 rounded-lg px-4 py-1.5 outline-none text-md md:text-2xl font-bold text-center text-[#242F49] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
-                        border-2 border-[#e5e7eb] 
-                        focus:border-[#0072bc] align-middle
-                        "
-                        />
-                      </td>
-                      <td>
-                        <input 
-                        type="number" 
-                        placeholder="--"
-                        onChange={(e) => handleGradeChange(e.target.value, setUnitsInput)}
-                        className="w-4/5 rounded-lg px-4 py-1.5 outline-none text-md md:text-2xl font-bold text-center text-[#242F49] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
-                        border-2 border-[#e5e7eb] 
-                        focus:border-[#0072bc] align-middle
-                        "
-                        />
-                      </td>
-                      <td><MdDeleteOutline className="hover:cursor-pointer hover:scale-110 transition-gpu duration-200 text-[#6B7280]/60 hover:text-red-400" size={20}/> </td>
-                    </tr>
+                  <tbody className={``}>
+                    {courses.map((course, index) => (
+                      <tr key={course.id} className="border-b border-slate-200 last:border-b-0">
+                        <td className="py-2 text-sm font-medium">Course {index + 1}</td>
+                        <td className="py-3 align-middle text-center">
+                          <input 
+                            type="number" 
+                            placeholder={gradePlaceholder[index] || "0"}
+                            value={course.finalGrade}
+                            onChange={(e) =>
+                              handleGradeChange(e.target.value, (value) =>
+                                updateCourseField(course.id, 'finalGrade', value)
+                              )
+                            }
+                            className="w-4/5 h-11 border border-[#c1c6d3] rounded-lg text-center placeholder:text-center placeholder:text-base placeholder:font-normal leading-11 px-0 py-0 outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none focus:border-[#0b4471] text-[#1c1a27] font-semibold"
+                          />
+                        </td>
+                        <td>
+                          <input 
+                            type="number" 
+                            placeholder={unitPlaceholder}
+                            value={course.units}
+                            onChange={(e) =>
+                              handleGradeChange(e.target.value, (value) =>
+                                updateCourseField(course.id, 'units', value)
+                              )
+                            }
+                            className="w-4/5 h-11 border border-[#c1c6d3] rounded-lg text-center placeholder:text-center placeholder:text-base placeholder:font-normal leading-11 px-0 py-0 outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none focus:border-[#0b4471] text-[#1c1a27] font-semibold"
+                          />
+                        </td>
+                        <td>
+                          <MdDeleteOutline
+                            onClick={() => {
+                              if(courses.length > 1){
+                                deleteCourse(course.id)
+                              }
+                            }}
+                            className="hover:cursor-pointer hover:scale-110 transition-gpu duration-200 text-[#6B7280]/60 hover:text-[#ba1a1a]"
+                            size={20}
+                          />
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
-                  <tbody className="">
-                    <tr className="">
-                      <td colSoab={4} className="p-4 border-t border-slate-100">
-                        <button className="text-xs font-medium cursor-pointer flex gap-2">
-                          <MdAddCircleOutline size={20}/>
-                          <span className="text-sm font-sm">ADD COURSE</span>
+                  <tbody className="sticky bottom-0 z-10 bg-[#fefefe]">
+                    <tr>
+                      <td colSpan={4} className="p-0">
+                        <div className="w-full h-[0.5px] bg-slate-200" />
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-[#fffcef]" onClick={addCourse}>
+                      <td colSpan={4} className="p-4 rounded-bl-lg rounded-br-lg">
+                        <button className="text-xs font-medium cursor-pointer flex gap-2 justify-center items-center">
+                          <MdAddCircleOutline size={20} className="font-light"/>
+                          <span className="text-sm font-inter font-medium uppercase tracking-wide">ADD COURSE</span>
                         </button>
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
-              <div>
-                <button className="bg-amber-300 w-full py-3 rounded-lg font-bold tracking-widest text-md hover:bg-yellow-300">
+              <div className="gap-3 flex">
+                <button className="bg-amber-300 text-[#6f5400] w-full py-3 rounded-lg font-bold tracking-widest text-md hover:bg-amber-300/80" onClick={calculateOverallGWA}>
                   CALCULATE
                 </button>
+                <button className="w-2/3 bg-[#e0e3e5] text-[#424851] py-3 rounded-lg font-bold tracking-widest text-md hover:bg-[#d8dadc]" onClick={clearAllCourses}>CLEAR ALL</button>
+              </div>
+              <div className={`bg-amber-300/20 w-full h-30 flex justify-center items-center rounded-lg ring-2 ring-amber-300/30 ${overallGWA !== null ? 'flex' : 'hidden'}`}>
+                <h1 className="text-black font-semibold text-2xl">{overallGWA}</h1>
               </div>
             </div>
           </section>
