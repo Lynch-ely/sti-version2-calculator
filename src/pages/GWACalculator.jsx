@@ -321,18 +321,18 @@ export default function GWACalculator() {
               </div>
 
               <div className={`flex flex-col justify-between bg-[#fefefe] rounded-lg p-3 gap-1 h-22 border-2 ${gwaData.color} w-full overflow-hidden`}>
-                <div className="flex justify-between w-full items-center">
-                  <div className="flex items-center gap-1 max-w-lg md:gap-2">
-                    <h5 className="text-[#242F49] font-medium text-xs md:text-sm">Final Grade:</h5>
+                <div className="flex justify-between w-full items-center ">
+                  <div className="flex items-center gap-1 w-auto md:gap-2 whitespace-nowrap">
+                    <h5 className="text-[#242F49] font-medium text-xs md:text-sm whitespace-nowrap">Final Grade:</h5>
                     <input
                     type="number"
                     value={gwaData.percentage}
                     placeholder="0.0"
                     readOnly
-                    className="border-none outline-none text-shadow-mauve-900 font-semibold text-xs md:text-sm text-[#242F49] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="w-12 border-none outline-none text-shadow-mauve-900 font-semibold text-xs md:text-sm text-[#242F49] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     ></input>
                   </div>
-                  <div className="overflow-x-auto">
+                  <div className="shrink-0 pl-2">
                     <h5 className={`text-[#242F49] font-medium text-xs md:text-sm`}>{gwaData.remark}</h5>
                   </div>
                 </div>
