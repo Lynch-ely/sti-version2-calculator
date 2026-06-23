@@ -137,8 +137,7 @@ export default function GWACalculator() {
   
   function updateCourseField(id, field, value) {
     setCourses((prev) => prev.map((course) => course.id === id ? { ...course, [field]: value } : course
-    )
-    );
+    ));
   }
 
   const deleteCourse = (id) => {
@@ -182,6 +181,7 @@ export default function GWACalculator() {
 
     const finalGWA = totalGradePoints / totalUnits;
     setOverallGWA(finalGWA.toFixed(2));
+    return grade;
   };
 
   function clearAllCourses(){
@@ -193,8 +193,43 @@ export default function GWACalculator() {
   const gradePlaceholder = ['1.00','1.25','1.50'];
   const unitPlaceholder = '3';
 
+  //DARK THEME
+  const bgDark = activeSwitch ? 'bg-[#0d141d]' : 'bg-[#f7f9fb]';
+  const navDark = activeSwitch ? 'bg-[#151c26] text-[#c1c6d7]' : 'bg-[#f7f9fb] text-[#414751]';
+
+  //OVERALL GWA RESULT FEEDBACK
+  const [admittedYear, setAdmittedYear] = useState('');
+
+  const overallGWAResult = () => {
+    const gwa = parseFloat(overallGWA);
+    if(!overallGWA || !admittedYear) return '';
+
+    const hasQualifyingGrade = courses.some(course => {
+      const grade = parseFloat(course.finalGrade);
+      if(isNaN(grade)) return false;
+
+      if (admittedYear === '2024'){
+        return grade > 2.25 && grade < 81.49;
+      }else{
+        return grade > 2.00 && grade < 86.49;
+      };
+    });
+
+    const qualifiesByGWA = gwa <= 1.50 || gwa >= 91.49;
+
+    if(qualifiesByGWA && !hasQualifyingGrade){
+      return `Congrats! You're on the Dean's / President's List!`;
+    }else if(qualifiesByGWA && hasQualifyingGrade){
+      return `You did well, but you are not qualify for DL or PL because you have a grade below 2.00 (49). Bawi next sem!`;
+    }else{
+      return `You need at least 1.50 to qualify for the Dean's / President's List.`;
+    }
+    return '';
+  };
+
+  
   return (
-    <div className={`min-h-screen font-inter ${activeSwitch ? 'bg-[#0F1117]' : 'bg-[#f7f9fb]'} p-5 sm:p-0`}>
+    <div className={`min-h-screen font-inter p-5 sm:p-0 ${bgDark}`}>
         <div className="max-w-2xl mx-auto space-y-6 pt-10">
           {/* HEADER */}
           <div className="flex justify-center items-center w-full relative shadow-[0_20px_50px_rgba(0,0,0,0.03)] ">
@@ -219,9 +254,10 @@ export default function GWACalculator() {
           </div> */}
 
           {/* NAV */}
-          <div className="w-full h-auto bg-[#f2f4f6] rounded-lg grid grid-cols-3 text-xs sm:text-sm font-medium p-0.5 shadow-sm gap-1">
+          <div className={`w-full h-auto rounded-lg grid grid-cols-3 text-xs sm:text-sm font-medium p-0.5 shadow-sm gap-1 ${navDark}`}>
             <button className= {`h-9 rounded-lg flex justify-center items-center text-xs md:text-sm
-            ${activeNav==='Course GWA' ? 'text-[#F5F5F5] bg-[#004481]' : 'bg-transparent text-[#414751]cursor-pointer hover:bg-[#e0e3e5]'}`} 
+            ${activeNav==='Course GWA' ? `text-[#F5F5F5] bg-[#004481]` : 'bg-transparent text-[#414751]cursor-pointer hover:bg-[#e0e3e5]'}
+            `} 
             onClick={() => setActiveNav('Course GWA')}>COURSE GWA</button>
             <button className= {`h-9 rounded-lg flex justify-center items-center text-xs md:text-sm
             ${activeNav==='GWA' ? 'text-[#F5F5F5] bg-[#004481]' : 'bg-transparent text-[#414751] cursor-pointer hover:bg-[#e0e3e5]'} `} 
@@ -286,11 +322,11 @@ export default function GWACalculator() {
 
               <div className={`flex flex-col justify-between bg-[#fefefe] rounded-lg p-3 gap-1 h-22 border-2 ${gwaData.color} w-full overflow-hidden`}>
                 <div className="flex justify-between w-full items-center">
-                  <div className="flex items-center gap-1 max-w-0 md:gap-2">
-                    <h5 className="text-[#242F49] font-medium text-xs md:text-sm ">GWA:</h5>
+                  <div className="flex items-center gap-1 max-w-lg md:gap-2">
+                    <h5 className="text-[#242F49] font-medium text-xs md:text-sm">Final Grade:</h5>
                     <input
                     type="number"
-                    value={gwaData.scale}
+                    value={gwaData.percentage}
                     placeholder="0.0"
                     readOnly
                     className="border-none outline-none text-shadow-mauve-900 font-semibold text-xs md:text-sm text-[#242F49] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
@@ -303,7 +339,7 @@ export default function GWACalculator() {
                 <input
                   type="number"
                   placeholder="--"
-                  value={gwaData.percentage}
+                  value={gwaData.scale}
                   readOnly
                   className="border-none outline-none text-2xl font-bold text-[#242F49] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   ></input>
@@ -313,6 +349,14 @@ export default function GWACalculator() {
           
           {/* GWA */}
           <section className={`${activeNav === 'GWA' ? 'block' : 'hidden'} font-hanken`}>
+            <div className="bg-[#FEFEFE] rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-3 space-y-2 mb-5">
+              <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Admitted Academic Year</h1>
+              <select defaultValue="" className="select w-full" onChange={(e) => setAdmittedYear(e.target.value)}>
+                <option value='' disabled hidden>--Select Admitted Academic Year--</option>
+                <option value='2024'>A.Y. 2024 and Earlier</option>
+                <option value='2025'>A.Y. 2025-2026 Onwards</option>
+              </select>
+            </div>
             <div className={` bg-[#FEFEFE] rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-5 space-y-3`}>
               <div className="flex justify-between">
                 <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Calculate your gwa:</h1>
@@ -322,16 +366,16 @@ export default function GWACalculator() {
                 <table className="rounded-lg">
                   <thead className="bg-amber-300 text-[#6f5400] sticky top-0 z-10">
                     <tr className="">
-                      <th className="w-[30%] text-sm py-3 rounded-tl-lg font-semibold">COURSE</th>
-                      <th className="w-[30%] text-sm py-3 font-semibold">FINAL GRADE</th>
-                      <th className="w-[30%] text-sm py-3 font-semibold">UNITS</th>
+                      <th className="w-[30%] text-xs md:text-sm py-3 rounded-tl-lg font-semibold">COURSE</th>
+                      <th className="w-[30%] text-xs md:text-sm py-3 font-semibold">FINAL GRADE</th>
+                      <th className="w-[30%] text-xs md:text-sm py-3 font-semibold">UNITS</th>
                       <th className="w-[5%] rounded-tr-lg"></th>
                     </tr>
                   </thead>
                   <tbody className={``}>
                     {courses.map((course, index) => (
                       <tr key={course.id} className="border-b border-slate-200 last:border-b-0">
-                        <td className="py-2 text-sm font-medium">Course {index + 1}</td>
+                        <td className="py-2 text-xs md:text-sm font-medium">Course {index + 1}</td>
                         <td className="py-3 align-middle text-center">
                           <input 
                             type="number" 
@@ -382,7 +426,7 @@ export default function GWACalculator() {
                       <td colSpan={4} className="p-4 rounded-bl-lg rounded-br-lg">
                         <button className="text-xs font-medium cursor-pointer flex gap-2 justify-center items-center">
                           <MdAddCircleOutline size={20} className="font-light"/>
-                          <span className="text-sm font-inter font-medium uppercase tracking-wide">ADD COURSE</span>
+                          <span className="text-xs md:text-sm font-inter font-medium uppercase tracking-wide">ADD COURSE</span>
                         </button>
                       </td>
                     </tr>
@@ -390,13 +434,16 @@ export default function GWACalculator() {
                 </table>
               </div>
               <div className="gap-3 flex">
-                <button className="bg-amber-300 text-[#6f5400] w-full py-3 rounded-lg font-bold tracking-widest text-md hover:bg-amber-300/80" onClick={calculateOverallGWA}>
+                <button className="bg-amber-300 text-[#6f5400] w-full py-3 rounded-lg font-bold tracking-widest text-xs md:text-sm hover:bg-amber-300/80" onClick={calculateOverallGWA}>
                   CALCULATE
                 </button>
-                <button className="w-2/3 bg-[#e0e3e5] text-[#424851] py-3 rounded-lg font-bold tracking-widest text-md hover:bg-[#d8dadc]" onClick={clearAllCourses}>CLEAR ALL</button>
+                <button className="w-2/3 bg-[#e0e3e5] text-[#424851] py-3 rounded-lg font-bold tracking-widest text-xs md:text-sm hover:bg-[#d8dadc]" onClick={clearAllCourses}>CLEAR ALL</button>
               </div>
-              <div className={`bg-amber-300/20 w-full h-30 flex justify-center items-center rounded-lg ring-2 ring-amber-300/30 ${overallGWA !== null ? 'flex' : 'hidden'}`}>
-                <h1 className="text-black font-semibold text-2xl">{overallGWA}</h1>
+              <div className={`bg-[#ffde9c] w-full h-22 flex justify-center items-center rounded-lg ${overallGWA !== null ? 'flex' : 'hidden'}`}>
+                <div className="flex flex-col items-center px-10">
+                  <h1 className="text-[#614100] font-semibold tracking-widest text-xl uppercase font-hanken text-center">GWA: <span className="text-xl font-bold">{overallGWA}</span></h1>
+                  <p className="text-[#614100] tracking-widest text-sm text-center">{overallGWAResult()}</p>
+                </div>
               </div>
             </div>
           </section>
