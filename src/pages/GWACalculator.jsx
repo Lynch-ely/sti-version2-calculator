@@ -230,7 +230,7 @@ export default function GWACalculator() {
   
   return (
     <div className={`min-h-screen font-inter p-5 sm:p-0 text-[#242F49] ${bgDark}`}>
-        <div className="max-w-2xl mx-auto space-y-6 pt-5">
+        <div className="max-w-2xl mx-auto space-y-3 md:space-y-6">
           {/* HEADER */}
           <div className="flex justify-center items-center w-full relative shadow-[0_20px_50px_rgba(0,0,0,0.03)] ">
             <h1 className="text-[#004481] text-xl md:text-xl font-bold">STI GWA CALCULATOR</h1>
@@ -349,10 +349,9 @@ export default function GWACalculator() {
           
           {/* GWA */}
           <section className={`${activeNav === 'GWA' ? 'block' : 'hidden'} font-hanken`}>
-            <div className="bg-[#FEFEFE] rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-3 space-y-2 mb-5">
+            <div className="bg-[#FEFEFE] rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-3 space-y-2 mb-3 md:mb-5">
               <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Admitted Academic Year</h1>
-              <select defaultValue="" className="select w-full bg-[#FEFEFE]" onChange={(e) => setAdmittedYear(e.target.value)}>
-                <option value='' disabled hidden>--Select Admitted Academic Year--</option>
+              <select defaultValue="2024" className="select w-full bg-[#FEFEFE]" onChange={(e) => setAdmittedYear(e.target.value)}>
                 <option value='2024'>A.Y. 2024 and Earlier</option>
                 <option value='2025'>A.Y. 2025-2026 Onwards</option>
               </select>
@@ -362,7 +361,7 @@ export default function GWACalculator() {
                 <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Calculate your gwa:</h1>
                 <HiInformationCircle className="text-xl hover:cursor-pointer hover:scale-110 transition-gpu duration-200 text-[#6B7280] hover:text-[#0072bc]"/> 
               </div>
-              <div className="flex flex-col gap-3 text-center max-h-110 overflow-hidden overflow-y-auto ">
+              <div className="flex flex-col gap-3 text-center max-h-77 md:max-h-110 overflow-hidden overflow-y-auto ">
                 <table className="rounded-lg">
                   <thead className="bg-amber-300 text-[#6f5400] sticky top-0 z-10">
                     <tr className="">
@@ -439,10 +438,10 @@ export default function GWACalculator() {
                 </button>
                 <button className="w-2/3 bg-[#e0e3e5] text-[#424851] py-3 rounded-lg font-bold tracking-widest text-xs md:text-sm hover:bg-[#d8dadc]" onClick={clearAllCourses}>CLEAR ALL</button>
               </div>
-              <div className={`bg-[#ffde9c] w-full h-22 flex justify-center items-center rounded-lg ${overallGWA !== null ? 'flex' : 'hidden'}`}>
-                <div className="flex flex-col items-center px-10">
-                  <h1 className="text-[#614100] font-semibold tracking-widest text-xl uppercase font-hanken text-center">GWA: <span className="text-xl font-bold">{overallGWA}</span></h1>
-                  <p className="text-[#614100] tracking-widest text-sm text-center">{overallGWAResult()}</p>
+              <div className={`bg-[#ffde9c] w-full h-18 md:h-22 flex justify-center items-center rounded-lg ${overallGWA !== null ? 'flex' : 'hidden'}`}>
+                <div className="flex flex-col items-center px-0">
+                  <h1 className="text-[#614100] font-semibold tracking-widest text-sm md:text-xl uppercase font-hanken text-center">GWA: <span className="text-sm md:text-xl font-bold">{overallGWA}</span></h1>
+                  <p className="text-[#614100] tracking-widest text-[9px] md:text-sm text-center">{overallGWAResult()}</p>
                 </div>
               </div>
             </div>
