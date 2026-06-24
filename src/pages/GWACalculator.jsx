@@ -220,7 +220,7 @@ export default function GWACalculator() {
     if(qualifiesByGWA && !hasQualifyingGrade){
       return `Congrats! You're on the Dean's / President's List!`;
     }else if(qualifiesByGWA && hasQualifyingGrade){
-      return `You did well, but you are not qualify for DL or PL because you have a grade below 2.00 (49). Bawi next sem!`;
+      return `You did well, but you are not qualify for DL or PL because you have a grade below 2.00. Bawi next sem!`;
     }else{
       return `You need at least 1.50 to qualify for the Dean's / President's List.`;
     }
@@ -272,8 +272,8 @@ export default function GWACalculator() {
             <div className={` bg-[#FEFEFE] rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-5 space-y-3 ${overallGWA != null ? 'flex' : 'hidden'}}`}>
               <div className="flex justify-between">
                 <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Enter Your Grade:</h1>
-                <div className="flex gap-1 hover:cursor-pointer hover:scale-110 transition-gpu duration-200 text-[#6B7280] hover:text-[#ba1a1a]">
-                  <MdDelete onClick={deleteInput} size={15}/>
+                <div className="flex gap-1 hover:cursor-pointer hover:scale-110 transition-gpu duration-200 text-[#6B7280] hover:text-[#ba1a1a]" onClick={deleteInput}>
+                  <MdDelete size={15}/>
                   <h5 className="text-xs font-inter font-medium uppercase tracking-wide">CLEAR ALL</h5>
                 </div> 
               </div>
