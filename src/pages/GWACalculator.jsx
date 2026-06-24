@@ -229,7 +229,7 @@ export default function GWACalculator() {
 
   
   return (
-    <div className={`min-h-screen font-inter p-5 sm:p-0 ${bgDark}`}>
+    <div className={`min-h-screen font-inter p-5 sm:p-0 text-[#242F49] ${bgDark}`}>
         <div className="max-w-2xl mx-auto space-y-6 pt-10">
           {/* HEADER */}
           <div className="flex justify-center items-center w-full relative shadow-[0_20px_50px_rgba(0,0,0,0.03)] ">
