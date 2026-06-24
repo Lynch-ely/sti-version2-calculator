@@ -254,15 +254,15 @@ export default function GWACalculator() {
           </div> */}
 
           {/* NAV */}
-          <div className={`w-full h-auto rounded-lg grid grid-cols-3 text-xs sm:text-sm font-medium p-0.5 shadow-sm gap-1 ${navDark}`}>
-            <button className= {`h-9 rounded-lg flex justify-center items-center text-xs md:text-sm
+          <div className={`w-full h-auto rounded-lg flex text-xs sm:text-sm font-medium p-0.5 shadow-sm gap-1 ${navDark}`}>
+            <button className= {`h-9 rounded-lg flex justify-center items-center md:text-sm whitespace-nowrap px-1 flex-1 text-[11px]
             ${activeNav==='Course GWA' ? `text-[#F5F5F5] bg-[#004481]` : 'bg-transparent text-[#414751]cursor-pointer hover:bg-[#e0e3e5]'}
             `} 
             onClick={() => setActiveNav('Course GWA')}>COURSE GWA</button>
-            <button className= {`h-9 rounded-lg flex justify-center items-center text-xs md:text-sm
+            <button className= {`h-9 rounded-lg flex justify-center items-center md:text-sm whitespace-nowrap px-1 flex-1 text-[11px]
             ${activeNav==='GWA' ? 'text-[#F5F5F5] bg-[#004481]' : 'bg-transparent text-[#414751] cursor-pointer hover:bg-[#e0e3e5]'} `} 
             onClick={() => setActiveNav('GWA')}>OVERALL GWA</button>
-            <button className= {`h-9 rounded-lg flex justify-center items-center text-xs md:text-sm
+            <button className= {`h-9 rounded-lg flex justify-center items-center md:text-sm whitespace-nowrap px-1 flex-[1.2] text-[11px]
             ${activeNav==='Cumulative GWA' ? 'text-[#F5F5F5] bg-[#004481]' : 'bg-transparent text-[#414751] cursor-pointer hover:bg-[#e0e3e5]'}`} 
             onClick={() => setActiveNav('Cumulative GWA')}>CUMULATIVE GWA</button>
           </div>
@@ -351,7 +351,7 @@ export default function GWACalculator() {
           <section className={`${activeNav === 'GWA' ? 'block' : 'hidden'} font-hanken`}>
             <div className="bg-[#FEFEFE] rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-3 space-y-2 mb-5">
               <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Admitted Academic Year</h1>
-              <select defaultValue="" className="select w-full" onChange={(e) => setAdmittedYear(e.target.value)}>
+              <select defaultValue="" className="select w-full bg-[#FEFEFE]" onChange={(e) => setAdmittedYear(e.target.value)}>
                 <option value='' disabled hidden>--Select Admitted Academic Year--</option>
                 <option value='2024'>A.Y. 2024 and Earlier</option>
                 <option value='2025'>A.Y. 2025-2026 Onwards</option>
