@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useActionState } from "react";
 import { MdOutlineDarkMode } from "react-icons/md";
 import { MdOutlineLightMode } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
@@ -13,7 +13,6 @@ import Footer from "./Footer";
 export default function GWACalculator() {
   const [activeNav, setActiveNav] = useState('Course GWA');
   const [activeSwitch, setActiveSwitch] = useState(false);
-  const [inputValue, setInputValue] = useState('');
   const [activeArrow, setActiveArrow] = useState(false);
 
   const [prelim, setPrelim] = useState('');
@@ -39,7 +38,7 @@ export default function GWACalculator() {
     setActiveArrow(!activeArrow);
   }
 
-  // COURSE GWA LOGIC
+  // -------COURSE GWA CALCULATION---------
   function courseGWA(){
     if(!prelim || !midterm || !prefinal || !finals){
       return {percentage: "--", scale: "0.0", remark: "REMARK", color: "border-[#ECEDF1]"}
@@ -128,7 +127,6 @@ export default function GWACalculator() {
     }
   };
 
-  // DELETE FUNCTION FOR COURSE GWA
   const deleteInput = () => {
     setPrelim('');
     setMidterm('');
@@ -145,19 +143,20 @@ export default function GWACalculator() {
   
   const [courses, setCourses] = useState(initialCourses);
   const [overallGWA, setOverallGWA] = useState(null);
+  const [admittedYear, setAdmittedYear] = useState('');
+  const [gwaFeedback, setGWAFeedback] = useState('');
+  const [hasCalculationError, setHasCalculationError] = useState(false);
   
   function updateCourseField(id, field, value) {
     setCourses((prev) => prev.map((course) => course.id === id ? { ...course, [field]: value } : course
     ));
   }
 
-  // DELETE ICON FOR EACH COURSE
   const deleteCourse = (id) => {
     if (courses.length <= 1) return;
     setCourses((prev) => prev.filter((course) => course.id !== id));
   };
 
-  // ADD COURSE BUTTON
   const addCourse = () => {
     setCourses((prev) => {
       const maxId = prev.length > 0 ? Math.max(...prev.map(c => c.id)) : 3;
@@ -170,11 +169,18 @@ export default function GWACalculator() {
     });
   };
   
-  const [admittedYear, setAdmittedYear] = useState('');
-  const [gwaFeedback, setGWAFeedback] = useState('');
 
-  // OVERALL GWA CALCULATION
+  // -------OVERALL GWA CALCULATION---------
   function calculateOverallGWA(){
+    if(!admittedYear){
+      setOverallGWA(null);
+      setGWAFeedback('');
+      setHasCalculationError(true);
+      return;
+    }
+
+    setHasCalculationError(false);
+
     let totalGradePoints = 0;
     let totalUnits = 0;
     let hasValidCourses = false;
@@ -201,11 +207,6 @@ export default function GWACalculator() {
     const finalGWA = totalGradePoints / totalUnits;
     setOverallGWA(finalGWA.toFixed(2));
     
-    if(!admittedYear){
-      setGWAFeedback("Select your academic year to check your standing");
-      return;
-    }
-
     const hasQualifyingGrade = courses.some(course => {
       const grade = parseFloat(course.finalGrade);
       if(isNaN(grade)) return false;
@@ -220,14 +221,13 @@ export default function GWACalculator() {
     const qualifiesByGWA = finalGWA <= 1.50 || finalGWA >= 91.49;
 
     let feedbackText = '';
-    if(!admittedYear){
-      feedbackText = `Select your admitted academic year to check standing`;
-    }else if(qualifiesByGWA && !hasQualifyingGrade){
+
+    if(qualifiesByGWA && !hasQualifyingGrade){
       feedbackText = `Congrats! You're on the Dean's / President's List!`;
       confetti({
         particleCount: 150,
         spread: 80,
-        origin: { y: 0.6 } // Adjust vertical origin point slightly above bottom
+        origin: { y: 0.6 }
       });
     }else if(qualifiesByGWA && hasQualifyingGrade){
       feedbackText = `You did well, but you are not qualify for DL or PL because you have a grade below ${admittedYear === '2024' ? '2.25' : '2.00'}. Bawi next sem!`;
@@ -244,6 +244,125 @@ export default function GWACalculator() {
     setOverallGWA(null);
   }
   
+  // -------CUMULATIVE GWA CALCULATION---------
+  const initialSemesters= [
+    { id: 1, name: 'Course 1', gradeGWA: ''},
+    { id: 2, name: 'Course 2', gradeGWA: ''},
+    { id: 3, name: 'Course 3', gradeGWA: ''},
+    { id: 4, name: 'Course 4', gradeGWA: ''},
+  ];
+
+  const [semesters, setSemesters] = useState(initialSemesters);
+  const [cumulativeGWA, setCumulativeGWA] = useState(null);
+  const [cumulativeFeedback, setCumulativeFeedback] = useState('');
+  const [hasError, setHasError] = useState(false);
+  
+  function updateSemestersField(id, field, value) {
+    setSemesters((prev) => prev.map((sem) => sem.id === id ? { ...sem, [field]: value } : sem
+    ));
+  }
+
+  const addSemesters = () => {
+    setSemesters((prev) => {
+      const maxId = prev.length > 0 ? Math.max(...prev.map(c => c.id)) : 4;
+      const nextId = maxId + 1;
+
+      return [
+        ...prev,
+        { id: nextId, name: `Semester ${nextId}`, gradeGWA: ''},
+      ]
+    });
+  };
+
+  const deleteSemester = (id) => {
+    if (semesters.length <= 1) return;
+    setSemesters((prev) => prev.filter((sem) => sem.id !== id));
+  };
+
+  function calculateCumulativeGWA(){
+    if(!admittedYear){
+      setCumulativeGWA(null);
+      setCumulativeFeedback('');
+      setHasError(true);
+      return;
+    }
+
+    setHasError(false);
+
+    let semGWATotal = 0;
+    let counter = 0;
+
+    semesters.forEach((sem) => {
+      const semGWAGrade = parseFloat(sem.gradeGWA);
+
+      if(!isNaN(semGWAGrade)){
+        semGWATotal += semGWAGrade;
+        counter++;
+      };
+
+      // if(isNaN(semGWAGrade)){
+      //   return;
+      // }else{
+      //   semGWATotal += semGWAGrade;
+      //   counter++;
+      // };
+    });
+
+    if(counter === 0){
+      setCumulativeGWA(null);
+      setCumulativeFeedback('Please enter a valid Semester GWA.');
+    }
+
+    const runningGWA = semGWATotal / counter;
+    const truncatedGWA = (Math.floor(runningGWA * 100) /100).toFixed(2);
+    setCumulativeGWA(truncatedGWA);
+
+    const hasQualifiedGrade = semesters.some(sem => {
+      const grade = parseFloat(sem.gradeGWA);
+      if(isNaN(grade)) return false;
+      
+      if (admittedYear === '2022'){
+        return grade > 2.25 && grade < 82.50;
+      }else if(admittedYear === '2024'){
+        return grade > 2.25 && grade < 81.50;
+      }else if(admittedYear === '2025'){
+        return grade > 2.00 && grade < 81.50;
+      }
+      return false;
+    });
+
+    const qualifiesByGWA = runningGWA <= 1.50 || runningGWA >= 91.49;
+    let feedbackText = '';
+
+    if(qualifiesByGWA && !hasQualifiedGrade){
+      
+      if (runningGWA <= 1.10) {
+        feedbackText = `Congrats SUMMA CUM LAUDE!`;
+      } else if (runningGWA <= 1.30) {
+        feedbackText = `Congrats MAGNA CUM LAUDE!`;
+      } else if (runningGWA <= 1.50) {
+        feedbackText = `Congrats CUM LAUDE!`;
+      }
+
+      confetti({
+        particleCount: 150,
+        spread: 80,
+        origin: { y: 0.6 }
+      });
+    }else if(qualifiesByGWA && hasQualifiedGrade){
+      feedbackText = `You did well, but you are not qualify for Latin Honors because you have a grade below ${admittedYear === '2025' ? '2.00' : '2.25'}. Still, Congrats!`;
+    }else{
+      feedbackText = `You need at least ${admittedYear === '2025' ? '2.00' : '2.25'} to qualify for Latin Honors.`;
+    }
+
+    setCumulativeFeedback(feedbackText);
+  }
+
+  // CUMULATIVE GWA CLEAR ALL
+  function clearAllSemesters(){
+    setSemesters(initialSemesters);
+    setCumulativeGWA(null);
+  }
   return (
     <div className={`min-h-screen font-inter p-5 sm:p-0 text-[#242F49] ${bgDark}`}>
         <div className="max-w-2xl mx-auto space-y-3 md:space-y-6 md:pt-10">
@@ -357,13 +476,17 @@ export default function GWACalculator() {
           <section className={`${activeNav === 'GWA' ? 'block' : 'hidden'} font-hanken`}>
             <div className="bg-[#FEFEFE] rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-3 space-y-2 md:mb-5">
               <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Admitted Academic Year</h1>
-              <select defaultValue="" className="select w-full bg-[#FEFEFE] border border-[#c1c6d3] focus:border-none" onChange={(e) => setAdmittedYear(e.target.value)}>
+              <select defaultValue="" className={`select w-full bg-[#FEFEFE] border focus:outline-none ${hasCalculationError ? 'border-[#ff1744] ring-2 ring-[#ffb4c3]' : 'border-[#c1c6d3]'} transition-all duration-200`} 
+              onChange={(e) => {
+              setAdmittedYear(e.target.value);
+              setHasCalculationError(false);
+              }}>
                 <option value='' disabled hidden>--Select Admitted Academic Year--</option> 
                 <option value='2024'>A.Y. 2024 and Earlier</option>
                 <option value='2025'>A.Y. 2025-2026 Onwards</option>
               </select>
             </div>
-            <div className={` bg-[#FEFEFE] rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-5 space-y-3`}>
+            <div className={` bg-[#FEFEFE] rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-5 space-y-3 mt-3`}>
               <div className="flex justify-between">
                 <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Calculate your gwa:</h1>
                 <HiInformationCircle className="text-xl hover:cursor-pointer hover:scale-110 transition-gpu duration-200 text-[#6B7280] hover:text-[#0072bc]"/> 
@@ -422,13 +545,13 @@ export default function GWACalculator() {
                       </tr>
                     ))}
                   </tbody>
-                  <tbody className="sticky bottom-0 z-10 bg-[#fefefe]">
+                  <tbody className="sticky bottom-0 z-10 bg-[#fefefe] ">
                     <tr>
                       <td colSpan={4} className="p-0">
                         <div className="w-full h-[0.5px] bg-slate-200" />
                       </td>
                     </tr>
-                    <tr className="hover:bg-[#fffcef]" onClick={addCourse}>
+                    <tr className="hover:bg-[#fffcef] " onClick={addCourse}>
                       <td colSpan={4} className="p-4 rounded-bl-lg rounded-br-lg">
                         <button className="text-xs font-medium cursor-pointer flex gap-2 justify-center items-center">
                           <MdAddCircleOutline size={20} className="font-light"/>
@@ -439,7 +562,7 @@ export default function GWACalculator() {
                   </tbody>
                 </table>
               </div>
-              <div className="gap-3 flex">
+              <div className="gap-3 flex ">
                 <button className="bg-amber-300 text-[#6f5400] w-full py-3 rounded-lg font-bold tracking-widest text-xs md:text-sm hover:bg-amber-300/80" onClick={calculateOverallGWA}>
                   CALCULATE
                 </button>
@@ -456,8 +579,89 @@ export default function GWACalculator() {
           
           {/* CUMULATIVE GWA */}
           <section className={`${activeNav === 'Cumulative GWA' ? 'block' : 'hidden'}`}>
-            <div className={` bg-[#FEFEFE] rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-5 space-y-3`}>
-              THIS IS CUMULATIVE GWA CALCULATOR
+            <div className="bg-[#FEFEFE] rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-3 space-y-2 md:mb-5">
+              <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Admitted Academic Year</h1>
+              <select defaultValue="" className={`select w-full bg-[#FEFEFE] border border-[#c1c6d3] focus:outline-none ${hasError ? 'border-[#ff1744] ring-2 ring-[#ffb4c3]' : 'border-[#c1c6d3]'}`} onChange={(e) => setAdmittedYear(e.target.value)}>
+                <option value='' disabled hidden>--Select Admitted Academic Year--</option> 
+                <option value='2022'>A.Y. 2022-2023 and 2023-2024</option>
+                <option value='2024'>A.Y. 2024-2025</option>
+                <option value='2025'>A.Y. 2025-2026 Onwards</option>
+              </select>
+            </div>
+            <div className={` bg-[#FEFEFE] rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-5 space-y-3 mt-3`}>
+              <div className="flex justify-between">
+                <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Calculate your cumulative gwa:</h1>
+                <HiInformationCircle className="text-xl hover:cursor-pointer hover:scale-110 transition-gpu duration-200 text-[#6B7280] hover:text-[#0072bc]"/> 
+              </div>
+              <div className="flex flex-col gap-3 text-center max-h-77 md:max-h-110 overflow-hidden overflow-y-auto ">
+                <table className="rounded-lg">
+                  <thead className="bg-amber-300 text-[#6f5400] sticky top-0 z-10">
+                    <tr className="">
+                      <th className="text-xs md:text-sm py-3 rounded-tl-lg font-semibold">SEMESTER / TERM</th>
+                      <th className="text-xs md:text-sm py-3 font-semibold">SEMESTER GWA</th>
+                      <th className="rounded-tr-lg"></th>
+                    </tr>
+                  </thead>
+                  <tbody className={``}>
+                    {semesters.map((sem, index) => (
+                      <tr key={sem.id} className="border-b border-slate-200 last:border-b-0">
+                        <td className="py-2 text-xs md:text-sm font-medium">Semester {index + 1}</td>
+                        <td className="py-3 align-middle text-center">
+                          <input 
+                            type="number" 
+                            placeholder={gradePlaceholder[index] || "0"}
+                            value={sem.gradeGWA}
+                            onChange={(e) =>
+                              handleGradeChange(e.target.value, (value) =>
+                                updateSemestersField(sem.id, 'gradeGWA', value)
+                              )
+                            }
+                            className="w-4/5 h-11 border border-[#c1c6d3] rounded-lg text-center placeholder:text-center placeholder:text-base placeholder:font-normal leading-11 px-0 py-0 outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none focus:border-[#0b4471] text-[#1c1a27] font-semibold"
+                          />
+                        </td>
+                        <td>
+                          <MdDeleteOutline
+                            onClick={() => {
+                              if(semesters.length > 1){
+                                deleteSemester(sem.id)
+                              }
+                            }}
+                            className="hover:cursor-pointer hover:scale-110 transition-gpu duration-200 text-[#6B7280]/60 hover:text-[#ba1a1a]"
+                            size={20}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                  <tbody className="sticky bottom-0 z-10 bg-[#fefefe] ">
+                    <tr>
+                      <td colSpan={4} className="p-0">
+                        <div className="w-full h-[0.5px] bg-slate-200" />
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-[#fffcef] " onClick={addSemesters}>
+                      <td colSpan={4} className="p-4 rounded-bl-lg rounded-br-lg">
+                        <button className="text-xs font-medium cursor-pointer flex gap-2 justify-center items-center">
+                          <MdAddCircleOutline size={20} className="font-light"/>
+                          <span className="text-xs md:text-sm font-inter font-medium uppercase tracking-wide">ADD COURSE</span>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div className="gap-3 flex ">
+                <button className="bg-amber-300 text-[#6f5400] w-full py-3 rounded-lg font-bold tracking-widest text-xs md:text-sm hover:bg-amber-300/80" onClick={calculateCumulativeGWA}>
+                  CALCULATE
+                </button>
+                <button className="w-2/3 bg-[#e0e3e5] text-[#424851] py-3 rounded-lg font-bold tracking-widest text-xs md:text-sm hover:bg-[#d8dadc]" onClick={clearAllSemesters}>CLEAR ALL</button>
+              </div>
+              <div className={`bg-amber-100 w-full h-18 md:h-22 flex justify-center items-center rounded-lg md:px-10 ${cumulativeGWA !== null ? 'flex' : 'hidden'}`}>
+                <div className="flex flex-col items-center px-0">
+                  <h1 className="text-[#614100] font-semibold tracking-widest text-sm md:text-lg uppercase font-hanken text-center">GWA: <span className="text-sm md:text-lg font-bold">{cumulativeGWA}</span></h1>
+                  <p className="text-[#614100] tracking-widest text-[9px] md:text-sm text-center">{cumulativeFeedback}</p>
+                </div>
+              </div>
             </div>
           </section>
 
