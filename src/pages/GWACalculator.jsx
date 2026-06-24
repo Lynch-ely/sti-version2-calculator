@@ -7,6 +7,7 @@ import { FaAngleDown } from "react-icons/fa";
 import { HiInformationCircle } from "react-icons/hi";
 import { MdDeleteOutline } from "react-icons/md";
 import { MdAddCircleOutline } from "react-icons/md";
+import confetti from "canvas-confetti";
 import Footer from "./Footer";
 
 export default function GWACalculator() {
@@ -20,10 +21,20 @@ export default function GWACalculator() {
   const [prefinal, setPrefinal] = useState('');
   const [finals, setFinals] = useState('');
 
+  // PLACEHOLDER
+  const gradePlaceholder = ['1.00','1.25','1.50'];
+  const unitPlaceholder = '3';
+
+  //DARK THEME
+  const bgDark = activeSwitch ? 'bg-[#0d141d]' : 'bg-[#f7f9fb]';
+  const navDark = activeSwitch ? 'bg-[#151c26] text-[#c1c6d7]' : 'bg-[#f7f9fb] text-[#414751]';
+
+  // LIGHT/DARK MODE SWITCH
   const toggleSwitch = () => {
     setActiveSwitch(!activeSwitch);
   }
 
+  // TOGGLE ARROW FOR GRADE EQUIVALENT
   const toggleArrow = () => {
     setActiveArrow(!activeArrow);
   }
@@ -117,6 +128,7 @@ export default function GWACalculator() {
     }
   };
 
+  // DELETE FUNCTION FOR COURSE GWA
   const deleteInput = () => {
     setPrelim('');
     setMidterm('');
@@ -124,8 +136,7 @@ export default function GWACalculator() {
     setFinals('');
   };
 
-  // OVERALL GWA LOGIC
-
+  // OVERALL COURSES
   const initialCourses= [
     { id: 1, name: 'Course 1', finalGrade: '', units: '' },
     { id: 2, name: 'Course 2', finalGrade: '', units: '' },
@@ -140,11 +151,13 @@ export default function GWACalculator() {
     ));
   }
 
+  // DELETE ICON FOR EACH COURSE
   const deleteCourse = (id) => {
     if (courses.length <= 1) return;
     setCourses((prev) => prev.filter((course) => course.id !== id));
   };
 
+  // ADD COURSE BUTTON
   const addCourse = () => {
     setCourses((prev) => {
       const maxId = prev.length > 0 ? Math.max(...prev.map(c => c.id)) : 3;
@@ -157,11 +170,15 @@ export default function GWACalculator() {
     });
   };
   
+  const [admittedYear, setAdmittedYear] = useState('');
+  const [gwaFeedback, setGWAFeedback] = useState('');
+
+  // OVERALL GWA CALCULATION
   function calculateOverallGWA(){
     let totalGradePoints = 0;
     let totalUnits = 0;
-    let allInputsValid = true;
-    
+    let hasValidCourses = false;
+
     courses.forEach((course) => {
       const grade = parseFloat(course.finalGrade);
       const units = parseFloat(course.units);
@@ -171,38 +188,23 @@ export default function GWACalculator() {
       }else{
         totalGradePoints += grade * units;
         totalUnits += units;
+        hasValidCourses = true;
       };
     });
 
-    if(!allInputsValid || totalUnits === 0){
-      allInputsValid = false;
+    if(!hasValidCourses || totalUnits === 0){
+      setOverallGWA(null);
+      setGWAFeedback('');
       return;
     }
 
     const finalGWA = totalGradePoints / totalUnits;
     setOverallGWA(finalGWA.toFixed(2));
-    return grade;
-  };
-
-  function clearAllCourses(){
-    setCourses(initialCourses);
-    setOverallGWA(null);
-  }
-
-  // PLACEHOLDER
-  const gradePlaceholder = ['1.00','1.25','1.50'];
-  const unitPlaceholder = '3';
-
-  //DARK THEME
-  const bgDark = activeSwitch ? 'bg-[#0d141d]' : 'bg-[#f7f9fb]';
-  const navDark = activeSwitch ? 'bg-[#151c26] text-[#c1c6d7]' : 'bg-[#f7f9fb] text-[#414751]';
-
-  //OVERALL GWA RESULT FEEDBACK
-  const [admittedYear, setAdmittedYear] = useState('');
-
-  const overallGWAResult = () => {
-    const gwa = parseFloat(overallGWA);
-    if(!overallGWA || !admittedYear) return '';
+    
+    if(!admittedYear){
+      setGWAFeedback("Select your academic year to check your standing");
+      return;
+    }
 
     const hasQualifyingGrade = courses.some(course => {
       const grade = parseFloat(course.finalGrade);
@@ -215,22 +217,36 @@ export default function GWACalculator() {
       };
     });
 
-    const qualifiesByGWA = gwa <= 1.50 || gwa >= 91.49;
+    const qualifiesByGWA = finalGWA <= 1.50 || finalGWA >= 91.49;
 
-    if(qualifiesByGWA && !hasQualifyingGrade){
-      return `Congrats! You're on the Dean's / President's List!`;
+    let feedbackText = '';
+    if(!admittedYear){
+      feedbackText = `Select your admitted academic year to check standing`;
+    }else if(qualifiesByGWA && !hasQualifyingGrade){
+      feedbackText = `Congrats! You're on the Dean's / President's List!`;
+      confetti({
+        particleCount: 150,
+        spread: 80,
+        origin: { y: 0.6 } // Adjust vertical origin point slightly above bottom
+      });
     }else if(qualifiesByGWA && hasQualifyingGrade){
-      return `You did well, but you are not qualify for DL or PL because you have a grade below 2.00. Bawi next sem!`;
+      feedbackText = `You did well, but you are not qualify for DL or PL because you have a grade below ${admittedYear === '2024' ? '2.25' : '2.00'}. Bawi next sem!`;
     }else{
-      return `You need at least 1.50 to qualify for the Dean's / President's List.`;
+      feedbackText = `You need at least 1.50 to qualify for the Dean's / President's List.`;
     }
-    return '';
+
+    setGWAFeedback(feedbackText);
   };
 
+  // GWA CLEAR ALL
+  function clearAllCourses(){
+    setCourses(initialCourses);
+    setOverallGWA(null);
+  }
   
   return (
     <div className={`min-h-screen font-inter p-5 sm:p-0 text-[#242F49] ${bgDark}`}>
-        <div className="max-w-2xl mx-auto space-y-3 md:space-y-6">
+        <div className="max-w-2xl mx-auto space-y-3 md:space-y-6 md:pt-10">
           {/* HEADER */}
           <div className="flex justify-center items-center w-full relative shadow-[0_20px_50px_rgba(0,0,0,0.03)] ">
             <h1 className="text-[#004481] text-xl md:text-xl font-bold">STI GWA CALCULATOR</h1>
@@ -242,17 +258,7 @@ export default function GWACalculator() {
               </button>
             </div>
           </div>
-
-          {/* A.Y
-          <div className="bg-[#FEFEFE] rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-3 space-y-2">
-              <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Select Admitted Academic Year</h1>
-              <select className="w-full border-2 border-[#ECE9FB] rounded-lg outline-none h-10 space-y-2">
-                <option>A.Y. 2022-2023 to 2023-2024</option>
-                <option>A.Y. 2024-2025</option>
-                <option>A.Y. 2025-2026 onwards</option>
-              </select>
-          </div> */}
-
+          
           {/* NAV */}
           <div className={`w-full h-auto rounded-lg flex text-xs sm:text-sm font-medium p-0.5 shadow-sm gap-1 ${navDark}`}>
             <button className= {`h-9 rounded-lg flex justify-center items-center md:text-sm whitespace-nowrap px-1 flex-1 text-[11px]
@@ -349,9 +355,10 @@ export default function GWACalculator() {
           
           {/* GWA */}
           <section className={`${activeNav === 'GWA' ? 'block' : 'hidden'} font-hanken`}>
-            <div className="bg-[#FEFEFE] rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-3 space-y-2 mb-3 md:mb-5">
+            <div className="bg-[#FEFEFE] rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-3 space-y-2 md:mb-5">
               <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Admitted Academic Year</h1>
-              <select defaultValue="2024" className="select w-full bg-[#FEFEFE]" onChange={(e) => setAdmittedYear(e.target.value)}>
+              <select defaultValue="" className="select w-full bg-[#FEFEFE] border border-[#c1c6d3] focus:border-none" onChange={(e) => setAdmittedYear(e.target.value)}>
+                <option value='' disabled hidden>--Select Admitted Academic Year--</option> 
                 <option value='2024'>A.Y. 2024 and Earlier</option>
                 <option value='2025'>A.Y. 2025-2026 Onwards</option>
               </select>
@@ -438,10 +445,10 @@ export default function GWACalculator() {
                 </button>
                 <button className="w-2/3 bg-[#e0e3e5] text-[#424851] py-3 rounded-lg font-bold tracking-widest text-xs md:text-sm hover:bg-[#d8dadc]" onClick={clearAllCourses}>CLEAR ALL</button>
               </div>
-              <div className={`bg-[#ffde9c] w-full h-18 md:h-22 flex justify-center items-center rounded-lg ${overallGWA !== null ? 'flex' : 'hidden'}`}>
+              <div className={`bg-amber-100 w-full h-18 md:h-22 flex justify-center items-center rounded-lg md:px-10 ${overallGWA !== null ? 'flex' : 'hidden'}`}>
                 <div className="flex flex-col items-center px-0">
-                  <h1 className="text-[#614100] font-semibold tracking-widest text-sm md:text-xl uppercase font-hanken text-center">GWA: <span className="text-sm md:text-xl font-bold">{overallGWA}</span></h1>
-                  <p className="text-[#614100] tracking-widest text-[9px] md:text-sm text-center">{overallGWAResult()}</p>
+                  <h1 className="text-[#614100] font-semibold tracking-widest text-sm md:text-lg uppercase font-hanken text-center">GWA: <span className="text-sm md:text-lg font-bold">{overallGWA}</span></h1>
+                  <p className="text-[#614100] tracking-widest text-[9px] md:text-sm text-center">{gwaFeedback}</p>
                 </div>
               </div>
             </div>
