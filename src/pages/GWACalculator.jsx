@@ -22,11 +22,8 @@ export default function GWACalculator() {
 
   // PLACEHOLDER
   const gradePlaceholder = ['1.00','1.25','1.50'];
+  const gwaPlaceholder = ['1.00','1.25','1.50', '1.75'];
   const unitPlaceholder = '3';
-
-  //DARK THEME
-  const bgDark = activeSwitch ? 'bg-[#0d141d]' : 'bg-[#f7f9fb]';
-  const navDark = activeSwitch ? 'bg-[#151c26] text-[#c1c6d7]' : 'bg-[#f7f9fb] text-[#414751]';
 
   // LIGHT/DARK MODE SWITCH
   const toggleSwitch = () => {
@@ -299,13 +296,6 @@ export default function GWACalculator() {
         semGWATotal += semGWAGrade;
         counter++;
       };
-
-      // if(isNaN(semGWAGrade)){
-      //   return;
-      // }else{
-      //   semGWATotal += semGWAGrade;
-      //   counter++;
-      // };
     });
 
     if(counter === 0){
@@ -363,15 +353,70 @@ export default function GWACalculator() {
     setSemesters(initialSemesters);
     setCumulativeGWA(null);
   }
+
+  // LIGHT MODE AND DARK MODE
+   //DARK THEME
+  const bgDark = activeSwitch ? 'bg-[#0d141d]' : 'bg-[#f7f9fb]';
+  const navDark = activeSwitch ? 'bg-[#151c26] text-[#c1c6d7]' : 'bg-[#f7f9fb] text-[#414751]';
+  const theme = activeSwitch ? 
+  {
+    // DARK MODE
+    bg: 'bg-[#0B1220]',
+    card: 'bg-[#151D2A]',
+    header: 'text-[#60A5FA]',
+    lm: 'text-[#F8FAFC]',
+    navCard: 'bg-[#151D2A] text-[#CBD5E1]',
+    text: 'text-[#F8FAFC]',
+    courseGWAText: 'text-[#F8FAFC]',
+    trHeadBlue: 'bg-[#2563EB] text-[#F8FAFC]',
+    trHeadYellow: 'bg-[#7C4A03] text-[#FDE68A]',
+    tableHover: 'hover:bg-[#1E293B]',
+    clearText: 'text-[#94A3B8]',
+    clearButton: 'bg-[#1E293B] text-[#E2E8F0] hover:bg-[#273449]',
+    deleteSection: 'text-[#64748B] hover:text-[#EF4444]',
+    border: 'border border-[#283548] focus:border-[#3B82F6]',
+    borderDivision: 'border-[#283548]',
+    infoIcon: 'text-[#94A3B8] hover:text-[#60A5FA]',
+    add: 'bg-[#283548]',
+    navActive: 'bg-[#2563EB] text-[#F8FAFC]',
+    navInactive: 'text-[#94A3B8]',
+    navHover: 'hover:bg-[#1E293B]',
+  }
+  :
+  {
+    // LIGHT MODE
+    bg: 'bg-[#f7f9fb]',
+    card: 'bg-[#FEFEFE]',
+    header: 'text-[#004481]',
+    lm: 'text-[#f5f5f5]',
+    navCard: 'bg-[#f7f9fb] text-[#414751]',
+    text: 'text-[#242F49]',
+    trHeadBlue: 'bg-[#0072bc] text-[#f5f5f5]',
+    trHeadYellow: 'bg-amber-300 text-[#6f5400]',
+    tableHover: 'hover:bg-[#fffdf5]',
+    clearText: 'text-[#6B7280]',
+    clearButton: 'bg-[#e0e3e5] text-[#424851]',
+    deleteSection: 'text-[#6B7280]/60 hover:text-[#ba1a1a]',
+    border: 'border border-slate-200 focus:border-[#0b4471]',
+    borderDivision:'border-slate-200',
+    courseGWAText: 'text-[#242F49]',
+    infoIcon: 'text-[#6B7280] hover:text-[#0072bc]',
+    add: 'bg-slate-200',
+    navActive: 'bg-[#004481] text-[#F8FAFC]',
+    navInactive: 'text-[#414751]',
+    navHover: 'hover:bg-[#E5E7EB]',
+  };
+
+  // gwaBorder: 'border-[#c1c6d3] focus:border-[#0b4471] text-[#1c1a27]',
   return (
-    <div className={`min-h-screen font-inter p-5 sm:p-0 text-[#242F49] ${bgDark}`}>
+    <div className={`min-h-screen font-inter p-5 sm:p-0 ${theme.text} ${theme.bg}`}>
         <div className="max-w-2xl mx-auto space-y-3 md:space-y-6 md:pt-10">
           {/* HEADER */}
           <div className="flex justify-center items-center w-full relative shadow-[0_20px_50px_rgba(0,0,0,0.03)] ">
-            <h1 className="text-[#004481] text-xl md:text-xl font-bold">STI GWA CALCULATOR</h1>
+            <h1 className="text-xl md:text-xl font-bold">STI GWA CALCULATOR</h1>
 
             {/* TOGGLE SWITCH */}
-            <div className={`absolute right-0 text-xl ${activeSwitch ? 'text-[#f5f5f5]' : 'text-black'}`}>
+            <div className={`absolute right-0 text-xl ${activeSwitch ? '' : 'text-black'}`}>
               <button onClick={toggleSwitch} className="cursor-pointer">
                 {activeSwitch ? <MdOutlineLightMode/> : <MdOutlineDarkMode/>}
               </button>
@@ -379,86 +424,85 @@ export default function GWACalculator() {
           </div>
           
           {/* NAV */}
-          <div className={`w-full h-auto rounded-lg flex text-xs sm:text-sm font-medium p-0.5 shadow-sm gap-1 ${navDark}`}>
+          <div className={`w-full h-auto rounded-lg flex text-xs sm:text-sm font-medium p-0.5 shadow-sm gap-1 ${theme.navCard}`}>
             <button className= {`h-9 rounded-lg flex justify-center items-center md:text-sm whitespace-nowrap px-1 flex-1 text-[11px]
-            ${activeNav==='Course GWA' ? `text-[#F5F5F5] bg-[#004481]` : 'bg-transparent text-[#414751]cursor-pointer hover:bg-[#e0e3e5]'}
-            `} 
+            ${activeNav==='Course GWA' ? theme.navActive : `${theme.navInactive} ${theme.navHover}`}`} 
             onClick={() => setActiveNav('Course GWA')}>COURSE GWA</button>
             <button className= {`h-9 rounded-lg flex justify-center items-center md:text-sm whitespace-nowrap px-1 flex-1 text-[11px]
-            ${activeNav==='GWA' ? 'text-[#F5F5F5] bg-[#004481]' : 'bg-transparent text-[#414751] cursor-pointer hover:bg-[#e0e3e5]'} `} 
+            ${activeNav==='GWA' ? theme.navActive : `${theme.navInactive} ${theme.navHover}`}`} 
             onClick={() => setActiveNav('GWA')}>OVERALL GWA</button>
             <button className= {`h-9 rounded-lg flex justify-center items-center md:text-sm whitespace-nowrap px-1 flex-[1.2] text-[11px]
-            ${activeNav==='Cumulative GWA' ? 'text-[#F5F5F5] bg-[#004481]' : 'bg-transparent text-[#414751] cursor-pointer hover:bg-[#e0e3e5]'}`} 
+            ${activeNav==='Cumulative GWA' ? theme.navActive : `${theme.navInactive} ${theme.navHover}`}`}  
             onClick={() => setActiveNav('Cumulative GWA')}>CUMULATIVE GWA</button>
           </div>
 
           {/* COURSE GRADE */}
           <section className={`${activeNav === 'Course GWA' ? 'block' : 'hidden'}`}>
-              <div className={`bg-[#FEFEFE] rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-5 space-y-3`}>
+              <div className={`rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-5 space-y-3 ${theme.card}`}>
               <div className="flex justify-between">
                 <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Enter Your Grade:</h1>
-                <div className="flex gap-1 hover:cursor-pointer hover:scale-110 transition-gpu duration-200 text-[#6B7280] hover:text-[#ba1a1a]" onClick={deleteInput}>
+                <div className={`flex gap-1 hover:cursor-pointer hover:scale-110 transition-gpu duration-200 hover:text-[#ba1a1a] ${theme.clearText}`} onClick={deleteInput}>
                   <MdDelete size={15}/>
                   <h5 className="text-xs font-inter font-medium uppercase tracking-wide">CLEAR ALL</h5>
                 </div> 
               </div>
               <div className="flex flex-col md:grid md:grid-cols-2 gap-3">
-                <div className="flex flex-col bg-[#fefefe] rounded-lg p-3 border border-[#ECEDF1] gap-1">
-                  <h5 className="text-[#242F49] font-medium text-xs md:text-sm">Prelim (20%)</h5>
+                <div className={`flex flex-col rounded-lg p-3 border gap-x-11 ${theme.borderDivision}`}>
+                  <h5 className={`font-medium text-xs md:text-sm ${theme.courseGWAText}`}>Prelim (20%)</h5>
                   <input
                   type="number"
                   placeholder="--"
                   value={prelim}
                   onChange={(e) => handleGradeChange(e.target.value, setPrelim)}
-                  className="border-none outline-none text-xl md:text-2xl font-bold text-[#242F49] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className={`border-none outline-none text-xl md:text-2xl font-bold [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${theme.border}`}
                   ></input>
                 </div>
-                <div className="flex flex-col bg-[#fefefe] rounded-lg p-3 border border-[#ECEDF1] gap-1">
-                  <h5 className="text-[#242F49] font-medium text-xs md:text-sm">Midterm (20%)</h5>
+                <div className={`flex flex-col rounded-lg p-3 border gap-1 ${theme.borderDivision}`}>
+                  <h5 className={`font-medium text-xs md:text-sm ${theme.courseGWAText}`}>Midterm (20%)</h5>
                   <input
                   type="number"
                   value={midterm}
                   onChange={(e) => handleGradeChange(e.target.value, setMidterm)}
                   placeholder="--"
-                  className="border-none outline-none text-2xl font-bold text-[#242F49] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className={`border-none outline-none text-xl md:text-2xl font-bold [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${theme.border}`}
                   ></input>
                 </div>
-                <div className="flex flex-col bg-[#fefefe] rounded-lg p-3 border border-[#ECEDF1] gap-1">
-                  <h5 className="text-[#242F49] font-medium text-xs md:text-sm">Prefinals (20%)</h5>
+                <div className={`flex flex-col rounded-lg p-3 border gap-1 ${theme.borderDivision}`}>
+                  <h5 className={`font-medium text-xs md:text-sm ${theme.courseGWAText}`}>Prefinals (20%)</h5>
                   <input
                   type="number"
                   placeholder="--"
                   value={prefinal}
                   onChange={(e) => handleGradeChange(e.target.value, setPrefinal)}
-                  className="border-none outline-none text-2xl font-bold text-[#242F49] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className={`border-none outline-none text-xl md:text-2xl font-bold [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${theme.border}`}
                   ></input>
                 </div>
-                <div className="flex flex-col bg-[#fefefe] rounded-lg p-3 border border-[#ECEDF1] gap-1">
-                  <h5 className="text-[#242F49] font-medium text-xs md:text-sm">Finals (40%)</h5>
+                <div className={`flex flex-col rounded-lg p-3 border gap-1 ${theme.borderDivision}`}>
+                  <h5 className={`font-medium text-xs md:text-sm ${theme.courseGWAText}`}>Finals (40%)</h5>
                   <input
                   type="number"
                   placeholder="--"
                   value={finals}
                   onChange={(e) => handleGradeChange(e.target.value, setFinals)}
-                  className="border-none outline-none text-2xl font-bold text-[#242F49] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className={`border-none outline-none text-xl md:text-2xl font-bold [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${theme.border}`}
                   ></input>
                 </div>
               </div>
 
-              <div className={`flex flex-col justify-between bg-[#fefefe] rounded-lg p-3 gap-1 h-22 border-2 ${gwaData.color} w-full overflow-hidden`}>
-                <div className="flex justify-between w-full items-center ">
+              <div className={`flex flex-col justify-between rounded-lg p-3 gap-1 h-22 border ${gwaData.color} w-full overflow-hidden`}>
+                <div className={`flex justify-between w-full items-center ${theme.courseGWAText}`}>
                   <div className="flex items-center gap-1 w-auto md:gap-2 whitespace-nowrap">
-                    <h5 className="text-[#242F49] font-medium text-xs md:text-sm whitespace-nowrap">Final Grade:</h5>
+                    <h5 className={`font-medium text-xs md:text-sm whitespace-nowrap ${theme.courseGWAText}`}>Final Grade:</h5>
                     <input
                     type="number"
                     value={gwaData.percentage}
                     placeholder="0.0"
                     readOnly
-                    className="w-12 border-none outline-none text-shadow-mauve-900 font-semibold text-xs md:text-sm text-[#242F49] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="w-12 border-none outline-none text-shadow-mauve-900 font-semibold text-xs md:text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     ></input>
                   </div>
                   <div className="shrink-0 pl-2">
-                    <h5 className={`text-[#242F49] font-medium text-xs md:text-sm`}>{gwaData.remark}</h5>
+                    <h5 className={`text-[#242F49] font-medium text-xs md:text-sm ${theme.courseGWAText}`}>{gwaData.remark}</h5>
                   </div>
                 </div>
                 <input
@@ -466,7 +510,7 @@ export default function GWACalculator() {
                   placeholder="--"
                   value={gwaData.scale}
                   readOnly
-                  className="border-none outline-none text-2xl font-bold text-[#242F49] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className={`border-none outline-none text-2xl font-bold text-[#242F49] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${theme.courseGWAText}`}
                   ></input>
               </div>
             </div>
@@ -474,9 +518,9 @@ export default function GWACalculator() {
           
           {/* GWA */}
           <section className={`${activeNav === 'GWA' ? 'block' : 'hidden'} font-hanken`}>
-            <div className="bg-[#FEFEFE] rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-3 space-y-2 md:mb-5">
+            <div className={`rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-3 space-y-2 md:mb-5 ${theme.card}`}>
               <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Admitted Academic Year</h1>
-              <select defaultValue="" className={`select w-full bg-[#FEFEFE] border focus:outline-none ${hasCalculationError ? 'border-[#ff1744] ring-2 ring-[#ffb4c3]' : 'border-[#c1c6d3]'} transition-all duration-200`} 
+              <select defaultValue="" className={`select w-full border focus:outline-none ${theme.card} ${hasCalculationError ? 'border-[#ff1744] ring-2 ring-[#ffb4c3]' : `${theme.borderDivision}`} transition-all duration-200`} 
               onChange={(e) => {
               setAdmittedYear(e.target.value);
               setHasCalculationError(false);
@@ -486,15 +530,15 @@ export default function GWACalculator() {
                 <option value='2025'>A.Y. 2025-2026 Onwards</option>
               </select>
             </div>
-            <div className={` bg-[#FEFEFE] rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-5 space-y-3 mt-3`}>
+            <div className={`${theme.card} rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-5 space-y-3 mt-3`}>
               <div className="flex justify-between">
                 <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Calculate your gwa:</h1>
-                <HiInformationCircle className="text-xl hover:cursor-pointer hover:scale-110 transition-gpu duration-200 text-[#6B7280] hover:text-[#0072bc]"/> 
+                <HiInformationCircle className={`text-xl hover:cursor-pointer hover:scale-110 transition-gpu duration-200 ${theme.infoIcon}`} /> 
               </div>
               <div className="flex flex-col gap-3 text-center max-h-77 md:max-h-110 overflow-hidden overflow-y-auto ">
                 <table className="rounded-lg">
-                  <thead className="bg-amber-300 text-[#6f5400] sticky top-0 z-10">
-                    <tr className="">
+                  <thead className="sticky top-0 z-10">
+                    <tr className={`${theme.trHeadYellow}`}>
                       <th className="w-[30%] text-xs md:text-sm py-3 rounded-tl-lg font-semibold">COURSE</th>
                       <th className="w-[30%] text-xs md:text-sm py-3 font-semibold">FINAL GRADE</th>
                       <th className="w-[30%] text-xs md:text-sm py-3 font-semibold">UNITS</th>
@@ -503,7 +547,7 @@ export default function GWACalculator() {
                   </thead>
                   <tbody className={``}>
                     {courses.map((course, index) => (
-                      <tr key={course.id} className="border-b border-slate-200 last:border-b-0">
+                      <tr key={course.id} className={`border-b last:border-b-0 ${theme.borderDivision}`}>
                         <td className="py-2 text-xs md:text-sm font-medium">Course {index + 1}</td>
                         <td className="py-3 align-middle text-center">
                           <input 
@@ -515,7 +559,7 @@ export default function GWACalculator() {
                                 updateCourseField(course.id, 'finalGrade', value)
                               )
                             }
-                            className="w-4/5 h-11 border border-[#c1c6d3] rounded-lg text-center placeholder:text-center placeholder:text-base placeholder:font-normal leading-11 px-0 py-0 outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none focus:border-[#0b4471] text-[#1c1a27] font-semibold"
+                            className={`w-4/5 h-11 border rounded-lg text-center placeholder:text-center placeholder:text-base placeholder:font-normal leading-11 px-0 py-0 outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none font-semibold ${theme.border}`}
                           />
                         </td>
                         <td>
@@ -528,7 +572,7 @@ export default function GWACalculator() {
                                 updateCourseField(course.id, 'units', value)
                               )
                             }
-                            className="w-4/5 h-11 border border-[#c1c6d3] rounded-lg text-center placeholder:text-center placeholder:text-base placeholder:font-normal leading-11 px-0 py-0 outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none focus:border-[#0b4471] text-[#1c1a27] font-semibold"
+                            className={`w-4/5 h-11 border rounded-lg text-center placeholder:text-center placeholder:text-base placeholder:font-normal leading-11 px-0 py-0 outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none font-semibold ${theme.border}`}
                           />
                         </td>
                         <td>
@@ -538,20 +582,20 @@ export default function GWACalculator() {
                                 deleteCourse(course.id)
                               }
                             }}
-                            className="hover:cursor-pointer hover:scale-110 transition-gpu duration-200 text-[#6B7280]/60 hover:text-[#ba1a1a]"
+                            className={`hover:cursor-pointer hover:scale-110 transition-gpu duration-200 ${theme.deleteSection}`}
                             size={20}
                           />
                         </td>
                       </tr>
                     ))}
                   </tbody>
-                  <tbody className="sticky bottom-0 z-10 bg-[#fefefe] ">
+                  <tbody className={`sticky bottom-0 z-10 ${theme.card}`}>
                     <tr>
                       <td colSpan={4} className="p-0">
-                        <div className="w-full h-[0.5px] bg-slate-200" />
+                        <div className={`w-full h-[0.5px] ${theme.add}`} />
                       </td>
                     </tr>
-                    <tr className="hover:bg-[#fffcef] " onClick={addCourse}>
+                    <tr className={`${theme.tableHover}`} onClick={addCourse}>
                       <td colSpan={4} className="p-4 rounded-bl-lg rounded-br-lg">
                         <button className="text-xs font-medium cursor-pointer flex gap-2 justify-center items-center">
                           <MdAddCircleOutline size={20} className="font-light"/>
@@ -563,10 +607,10 @@ export default function GWACalculator() {
                 </table>
               </div>
               <div className="gap-3 flex ">
-                <button className="bg-amber-300 text-[#6f5400] w-full py-3 rounded-lg font-bold tracking-widest text-xs md:text-sm hover:bg-amber-300/80" onClick={calculateOverallGWA}>
+                <button className= {`w-full py-3 rounded-lg font-bold tracking-widest text-xs md:text-sm hover:bg-amber-300/80 ${theme.trHeadYellow}`} onClick={calculateOverallGWA}>
                   CALCULATE
                 </button>
-                <button className="w-2/3 bg-[#e0e3e5] text-[#424851] py-3 rounded-lg font-bold tracking-widest text-xs md:text-sm hover:bg-[#d8dadc]" onClick={clearAllCourses}>CLEAR ALL</button>
+                <button className={`w-2/3 py-3 rounded-lg font-bold tracking-widest text-xs md:text-sm ${theme.clearButton}`} onClick={clearAllCourses}>CLEAR ALL</button>
               </div>
               <div className={`bg-amber-100 w-full h-18 md:h-22 flex justify-center items-center rounded-lg md:px-10 ${overallGWA !== null ? 'flex' : 'hidden'}`}>
                 <div className="flex flex-col items-center px-0">
@@ -579,34 +623,34 @@ export default function GWACalculator() {
           
           {/* CUMULATIVE GWA */}
           <section className={`${activeNav === 'Cumulative GWA' ? 'block' : 'hidden'}`}>
-            <div className="bg-[#FEFEFE] rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-3 space-y-2 md:mb-5">
+            <div className={`rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-3 space-y-2 md:mb-5 ${theme.card}`}>
               <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Admitted Academic Year</h1>
-              <select defaultValue="" className={`select w-full bg-[#FEFEFE] border border-[#c1c6d3] focus:outline-none ${hasError ? 'border-[#ff1744] ring-2 ring-[#ffb4c3]' : 'border-[#c1c6d3]'}`} onChange={(e) => setAdmittedYear(e.target.value)}>
+              <select defaultValue="" className={`select w-full border focus:outline-none ${theme.card} ${hasError ? 'border-[#ff1744] ring-2 ring-[#ffb4c3]' : `${theme.borderDivision}`}`} onChange={(e) => setAdmittedYear(e.target.value)}>
                 <option value='' disabled hidden>--Select Admitted Academic Year--</option> 
                 <option value='2022'>A.Y. 2022-2023 and 2023-2024</option>
                 <option value='2024'>A.Y. 2024-2025</option>
                 <option value='2025'>A.Y. 2025-2026 Onwards</option>
               </select>
             </div>
-            <div className={` bg-[#FEFEFE] rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-5 space-y-3 mt-3`}>
+            <div className={` ${theme.card} rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-5 space-y-3 mt-3`}>
               <div className="flex justify-between">
                 <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Calculate your cumulative gwa:</h1>
-                <HiInformationCircle className="text-xl hover:cursor-pointer hover:scale-110 transition-gpu duration-200 text-[#6B7280] hover:text-[#0072bc]"/> 
+                <HiInformationCircle className={`text-xl hover:cursor-pointer hover:scale-110 transition-gpu duration-200 ${theme.infoIcon}`}/> 
               </div>
-              <div className="flex flex-col gap-3 text-center max-h-77 md:max-h-110 overflow-hidden overflow-y-auto ">
+              <div className="flex flex-col gap-3 text-center max-h-80 md:max-h-110 overflow-hidden overflow-y-auto">
                 <table className="rounded-lg">
-                  <thead className="bg-amber-300 text-[#6f5400] sticky top-0 z-10">
-                    <tr className="">
-                      <th className="text-xs md:text-sm py-3 rounded-tl-lg font-semibold">SEMESTER / TERM</th>
-                      <th className="text-xs md:text-sm py-3 font-semibold">SEMESTER GWA</th>
-                      <th className="rounded-tr-lg"></th>
+                  <thead className="sticky top-0 z-10">
+                    <tr className={`${theme.trHeadYellow}`}>
+                      <th className="px-3 whitespace-nowrap text-xs md:text-sm py-3 rounded-tl-lg font-semibold">SEMESTER / TERM</th>
+                      <th className="px-3 whitespace-nowrap text-xs md:text-sm py-3 font-semibold">SEMESTER GWA</th>
+                      <th className="px-3 rounded-tr-lg"></th>
                     </tr>
                   </thead>
                   <tbody className={``}>
                     {semesters.map((sem, index) => (
-                      <tr key={sem.id} className="border-b border-slate-200 last:border-b-0">
+                      <tr key={sem.id} className={`border-b last:border-b-0 ${theme.borderDivision}`}>
                         <td className="py-2 text-xs md:text-sm font-medium">Semester {index + 1}</td>
-                        <td className="py-3 align-middle text-center">
+                        <td className={`py-3 align-middle text-center`}>
                           <input 
                             type="number" 
                             placeholder={gradePlaceholder[index] || "0"}
@@ -616,34 +660,34 @@ export default function GWACalculator() {
                                 updateSemestersField(sem.id, 'gradeGWA', value)
                               )
                             }
-                            className="w-4/5 h-11 border border-[#c1c6d3] rounded-lg text-center placeholder:text-center placeholder:text-base placeholder:font-normal leading-11 px-0 py-0 outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none focus:border-[#0b4471] text-[#1c1a27] font-semibold"
+                            className={`w-4/5 h-11 border rounded-lg text-center placeholder:text-center placeholder:text-base placeholder:font-normal leading-11 px-0 py-0 outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none font-semibold ${theme.border}`}
                           />
                         </td>
-                        <td>
+                        <td className="pr-10 md:md:pr-0">
                           <MdDeleteOutline
                             onClick={() => {
                               if(semesters.length > 1){
                                 deleteSemester(sem.id)
                               }
                             }}
-                            className="hover:cursor-pointer hover:scale-110 transition-gpu duration-200 text-[#6B7280]/60 hover:text-[#ba1a1a]"
+                            className={`hover:cursor-pointer hover:scale-110 transition-gpu duration-200 ${theme.deleteSection}`}
                             size={20}
                           />
                         </td>
                       </tr>
                     ))}
                   </tbody>
-                  <tbody className="sticky bottom-0 z-10 bg-[#fefefe] ">
+                  <tbody className={`sticky bottom-0 z-10 ${theme.card} ${theme.tableHover}`}>
                     <tr>
                       <td colSpan={4} className="p-0">
-                        <div className="w-full h-[0.5px] bg-slate-200" />
+                        <div className={`w-full h-[0.5px] ${theme.add}`} />
                       </td>
                     </tr>
-                    <tr className="hover:bg-[#fffcef] " onClick={addSemesters}>
+                    <tr className={`${theme.tableHover}`} onClick={addSemesters}>
                       <td colSpan={4} className="p-4 rounded-bl-lg rounded-br-lg">
                         <button className="text-xs font-medium cursor-pointer flex gap-2 justify-center items-center">
                           <MdAddCircleOutline size={20} className="font-light"/>
-                          <span className="text-xs md:text-sm font-inter font-medium uppercase tracking-wide">ADD COURSE</span>
+                          <span className="text-xs md:text-sm font-inter font-medium uppercase tracking-wide">ADD SEMESTER</span>
                         </button>
                       </td>
                     </tr>
@@ -651,10 +695,10 @@ export default function GWACalculator() {
                 </table>
               </div>
               <div className="gap-3 flex ">
-                <button className="bg-amber-300 text-[#6f5400] w-full py-3 rounded-lg font-bold tracking-widest text-xs md:text-sm hover:bg-amber-300/80" onClick={calculateCumulativeGWA}>
+                <button className={`w-full py-3 rounded-lg font-bold tracking-widest text-xs md:text-sm hover:bg-amber-300/80 ${theme.trHeadYellow}`} onClick={calculateCumulativeGWA}>
                   CALCULATE
                 </button>
-                <button className="w-2/3 bg-[#e0e3e5] text-[#424851] py-3 rounded-lg font-bold tracking-widest text-xs md:text-sm hover:bg-[#d8dadc]" onClick={clearAllSemesters}>CLEAR ALL</button>
+                <button className={`w-2/3 py-3 rounded-lg font-bold tracking-widest text-xs md:text-sm ${theme.clearButton}`} onClick={clearAllSemesters}>CLEAR ALL</button>
               </div>
               <div className={`bg-amber-100 w-full h-18 md:h-22 flex justify-center items-center rounded-lg md:px-10 ${cumulativeGWA !== null ? 'flex' : 'hidden'}`}>
                 <div className="flex flex-col items-center px-0">
@@ -666,7 +710,7 @@ export default function GWACalculator() {
           </section>
 
           {/* GRADES EQUIVALENT */}
-          <div className={`bg-[#FEFEFE] rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-5 ${activeArrow ? 'space-y-0' : 'space-y-3'}`}>
+          <div className={`rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-5 ${theme.card} ${activeArrow ? 'space-y-0' : 'space-y-3'}`}>
               <div className="flex justify-between">
                 <h1 className="text-xs font-inter font-medium uppercase tracking-wide">GRADES EQUIVALENT</h1>
                 <div className="transition-all" onClick={toggleArrow}>{activeArrow ? <FaAngleDown /> : <FaAngleUp />}</div>
@@ -675,62 +719,62 @@ export default function GWACalculator() {
                 <div className={`overflow-x-auto w-full border-slate-200 rounded-lg min-h-0 scrollbar-none [&::-webkit-scrollbar]:hidden ${activeArrow ? 'hidden' : 'block'}`}>
                   <table className="w-full border-none">
                     <thead>
-                      <tr className="bg-[#0072bc] text-[#f5f5f5]">
+                      <tr className={`${theme.trHeadBlue}`}>
                         <th className="p-3 w-1/3 text-xs md:text-sm font-semibold text-left">Grade Range</th>
                         <th className="p-3 w-1/3 text-xs md:text-sm font-semibold text-center sm:text-left">GWA</th>
                         <th className="p-3 w-1/3 text-xs md:text-sm font-semibold text-left">Remark</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr className="hover:bg-[#fffdf5]">
-                        <td className="p-3 border-slate-200 border-b text-xs md:text-sm border-l whitespace-nowrap">97.50 - 100</td>
-                        <td className="p-3 border-slate-200 border-b text-xs md:text-sm text-center sm:text-left">1.00</td>
-                        <td className="p-3 border-slate-200 border-b text-xs md:text-sm border-r">Excellent</td>
+                      <tr className={`${theme.tableHover}`}>
+                        <td className={`p-3 text-xs md:text-sm border-l whitespace-nowrap border-b ${theme.borderDivision}`}>97.50 - 100</td>
+                        <td className={`p-3 text-xs md:text-sm text-center sm:text-left border-b ${theme.borderDivision}`}>1.00</td>
+                        <td className={`p-3 text-xs md:text-sm border-r border-b ${theme.borderDivision}`}>Excellent</td>
                       </tr>
-                      <tr className="hover:bg-[#fffdf5]">
-                          <td className="p-3 border-slate-200 border-b text-xs md:text-sm border-l  whitespace-nowrap">94.50 - 97.49</td>
-                          <td className="p-3 border-slate-200 border-b text-xs md:text-sm text-center sm:text-left">1.25</td>
-                          <td className="p-3 border-slate-200 border-b text-xs md:text-sm border-r" >Very Good</td>
+                      <tr className={`${theme.tableHover}`}>
+                          <td className={`p-3 text-xs md:text-sm border-l whitespace-nowrap border-b ${theme.borderDivision}`}>94.50 - 97.49</td>
+                          <td className={`p-3 text-xs md:text-sm text-center sm:text-left border-b ${theme.borderDivision}`}>1.25</td>
+                          <td className={`p-3 text-xs md:text-sm border-r border-b ${theme.borderDivision}`}>Very Good</td>
                       </tr>
-                      <tr className="hover:bg-[#fffdf5]">
-                          <td className="p-3 border-slate-200 border-b text-xs md:text-sm border-l whitespace-nowrap">91.49 - 94.49</td>
-                          <td className="p-3 border-slate-200 border-b text-xs md:text-sm text-center sm:text-left">1.50</td>
-                          <td className="p-3 border-slate-200 border-b text-xs md:text-sm border-r" >Very Good</td>
+                      <tr className={`${theme.tableHover}`}>
+                          <td className={`p-3 text-xs md:text-sm border-l whitespace-nowrap border-b ${theme.borderDivision}`}>91.49 - 94.49</td>
+                          <td className={`p-3 text-xs md:text-sm text-center sm:text-left border-b ${theme.borderDivision}`}>1.50</td>
+                          <td className={`p-3 text-xs md:text-sm border-r border-b ${theme.borderDivision}`}>Very Good</td>
                       </tr>
-                      <tr className="hover:bg-[#fffdf5]">
-                          <td className="p-3 border-slate-200 border-b text-xs md:text-sm border-l whitespace-nowrap">86.50 - 91.49</td>
-                          <td className="p-3 border-slate-200 border-b text-xs md:text-sm text-center sm:text-left">1.75</td>
-                          <td className="p-3 border-slate-200 border-b text-xs md:text-sm border-r" >Very Good</td>
+                      <tr className={`${theme.tableHover}`}>
+                          <td className={`p-3 text-xs md:text-sm border-l whitespace-nowrap border-b ${theme.borderDivision}`}>86.50 - 91.49</td>
+                          <td className={`p-3 text-xs md:text-sm text-center sm:text-left border-b ${theme.borderDivision}`}>1.75</td>
+                          <td className={`p-3 text-xs md:text-sm border-r border-b ${theme.borderDivision}`}>Very Good</td>
                       </tr>
-                      <tr className="hover:bg-[#fffdf5]">
-                          <td className="p-3 border-slate-200 border-b text-xs md:text-sm border-l whitespace-nowrap"> 81.50 - 86.49</td>
-                          <td className="p-3 border-slate-200 border-b text-xs md:text-sm text-center sm:text-left">2.00</td>
-                          <td className="p-3 border-slate-200 border-b text-xs md:text-sm border-r" >Satisfactory</td>
+                      <tr className={`${theme.tableHover}`}>
+                          <td className={`p-3 text-xs md:text-sm border-l whitespace-nowrap border-b ${theme.borderDivision}`}> 81.50 - 86.49</td>
+                          <td className={`p-3 text-xs md:text-sm text-center sm:text-left border-b ${theme.borderDivision}`}>2.00</td>
+                          <td className={`p-3 text-xs md:text-sm border-r border-b ${theme.borderDivision}`}>Satisfactory</td>
                       </tr>
-                      <tr className="hover:bg-[#fffdf5]">
-                          <td className="p-3 border-slate-200 border-b text-xs md:text-sm border-l whitespace-nowrap">76.00 - 81.49</td>
-                          <td className="p-3 border-slate-200 border-b text-xs md:text-sm text-center sm:text-left">2.25</td>
-                          <td className="p-3 border-slate-200 border-b text-xs md:text-sm border-r" >Satisfactory</td>
+                      <tr className={`${theme.tableHover}`}>
+                          <td className={`p-3 text-xs md:text-sm border-l whitespace-nowrap border-b ${theme.borderDivision}`}>76.00 - 81.49</td>
+                          <td className={`p-3 text-xs md:text-sm text-center sm:text-left border-b ${theme.borderDivision}`}>2.25</td>
+                          <td className={`p-3 text-xs md:text-sm border-r border-b ${theme.borderDivision}`}>Satisfactory</td>
                       </tr>
-                      <tr className="hover:bg-[#fffdf5]">
-                          <td className="p-3 border-slate-200 border-b text-xs md:text-sm border-l whitespace-nowrap">70.50 - 75.99</td>
-                          <td className="p-3 border-slate-200 border-b text-xs md:text-sm text-center sm:text-left">2.50</td>
-                          <td className="p-3 border-slate-200 border-b text-xs md:text-sm border-r" >Satisfactory</td>
+                      <tr className={`${theme.tableHover}`}>
+                          <td className={`p-3 text-xs md:text-sm border-l whitespace-nowrap border-b ${theme.borderDivision}`}>70.50 - 75.99</td>
+                          <td className={`p-3 text-xs md:text-sm text-center sm:text-left border-b ${theme.borderDivision}`}>2.50</td>
+                          <td className={`p-3 text-xs md:text-sm border-r border-b ${theme.borderDivision}`}>Satisfactory</td>
                       </tr>
-                      <tr className="hover:bg-[#fffdf5]">
-                          <td className="p-3 border-slate-200 border-b text-xs md:text-sm border-l whitespace-nowrap">65.00 - 70.49</td>
-                          <td className="p-3 border-slate-200 border-b text-xs md:text-sm text-center sm:text-left">2.75</td>
-                          <td className="p-3 border-slate-200 border-b text-xs md:text-sm border-r" >Fair</td>
+                      <tr className={`${theme.tableHover}`}>
+                          <td className={`p-3 text-xs md:text-sm border-l whitespace-nowrap border-b ${theme.borderDivision}`}>65.00 - 70.49</td>
+                          <td className={`p-3 text-xs md:text-sm text-center sm:text-left border-b ${theme.borderDivision}`}>2.75</td>
+                          <td className={`p-3 text-xs md:text-sm border-r border-b ${theme.borderDivision}`}>Fair</td>
                       </tr>
-                      <tr className="hover:bg-[#fffdf5]">
-                          <td className="p-3 border-slate-200 border-b text-xs md:text-sm border-l whitespace-nowrap">59.50 - 64.99</td>
-                          <td className="p-3 border-slate-200 border-b text-xs md:text-sm text-center sm:text-left">3.00</td>
-                          <td className="p-3 border-slate-200 border-b text-xs md:text-sm border-r" >Fair</td>
+                      <tr className={`${theme.tableHover}`}>
+                          <td className={`p-3 text-xs md:text-sm border-l whitespace-nowrap border-b ${theme.borderDivision}`}>59.50 - 64.99</td>
+                          <td className={`p-3 text-xs md:text-sm text-center sm:text-left border-b ${theme.borderDivision}`}>3.00</td>
+                          <td className={`p-3 text-xs md:text-sm border-r border-b ${theme.borderDivision}`}>Fair</td>
                       </tr>
-                      <tr className="hover:bg-[#fffdf5]">
-                          <td className="p-3 border-slate-200 border-b text-xs md:text-sm border-l whitespace-nowrap">59.49 and below</td>
-                          <td className="p-3 border-slate-200 border-b text-xs md:text-sm text-center sm:text-left">5.00</td>
-                          <td  className="p-3 border-slate-200 border-b text-xs md:text-sm border-r">Failed </td>
+                      <tr className={`${theme.tableHover}`}>
+                          <td className={`p-3 text-xs md:text-sm border-l whitespace-nowrap border-b ${theme.borderDivision}`}>59.49 and below</td>
+                          <td className={`p-3 text-xs md:text-sm text-center sm:text-left border-b ${theme.borderDivision}`}>5.00</td>
+                          <td className={`p-3 text-xs md:text-sm border-r border-b ${theme.borderDivision}`}>Failed </td>
                       </tr>
                     </tbody>
                     {/* <thead>
