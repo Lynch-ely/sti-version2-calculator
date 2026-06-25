@@ -637,7 +637,7 @@ export default function GWACalculator() {
                 <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Calculate your cumulative gwa:</h1>
                 <HiInformationCircle className={`text-xl hover:cursor-pointer hover:scale-110 transition-gpu duration-200 ${theme.infoIcon}`}/> 
               </div>
-              <div className="flex flex-col gap-3 text-center max-h-80 md:max-h-110 overflow-hidden overflow-y-auto">
+              <div className="flex flex-col gap-3 text-center max-h-95 md:max-h-110 overflow-hidden overflow-y-auto">
                 <table className="rounded-lg">
                   <thead className="sticky top-0 z-10">
                     <tr className={`${theme.trHeadYellow}`}>
@@ -653,7 +653,7 @@ export default function GWACalculator() {
                         <td className={`py-3 align-middle text-center`}>
                           <input 
                             type="number" 
-                            placeholder={gradePlaceholder[index] || "0"}
+                            placeholder={gwaPlaceholder[index] || "0"}
                             value={sem.gradeGWA}
                             onChange={(e) =>
                               handleGradeChange(e.target.value, (value) =>
