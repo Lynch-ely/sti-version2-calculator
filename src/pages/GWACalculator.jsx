@@ -846,7 +846,7 @@ export default function GWACalculator() {
       <div className='min-h-screen w-full flex items-center justify-center fixed z-50'>
         <div className={`${theme.overlay} w-full h-full top-0 left-0 right-0 bottom-0 fixed flex items-center justify-center font-inter tracking-wide px-3`}>
           <div className={`relative ${theme.card} max-w-2xl w-full h-auto rounded-lg`}>
-              <div className='border-b-2 border-gray flex justify-between absolute w-full left-0 '>
+              <div className={`border-b-2 ${theme.borderDivision} flex justify-between absolute w-full left-0 `}>
                   <div className='p-5 flex justify-between w-full'>
                       <h1 className={`${theme.overlayHeader} font-semibold text-sm md:text-base`}>How to Calculate Your Semester GWA</h1>
                       {/* <button className={`${theme.overlayClose} text-xl`} onClick={onClose}>
@@ -938,7 +938,7 @@ export default function GWACalculator() {
       <div className='min-h-screen w-full flex items-center justify-center fixed z-50'>
         <div className={`${theme.overlay} w-full h-full top-0 left-0 right-0 bottom-0 fixed flex items-center justify-center font-inter tracking-wide px-3`}>
           <div className={`relative ${theme.card} max-w-2xl w-full h-auto rounded-lg`}>
-              <div className='border-b-2 border-gray flex justify-between absolute w-full left-0 '>
+              <div className={`border-b-2 ${theme.borderDivision} flex justify-between absolute w-full left-0 `}>
                   <div className='p-5 flex justify-between w-full'>
                       <h1 className={`${theme.overlayHeader} font-semibold text-sm md:text-base`}>How to Calculate Your Cumulative GWA</h1>
                   </div>
