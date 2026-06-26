@@ -369,7 +369,9 @@ export default function GWACalculator() {
     text: 'text-[#F8FAFC]',
     courseGWAText: 'text-[#F8FAFC]',
     trHeadBlue: 'bg-[#2563EB] text-[#F8FAFC]',
-    trHeadYellow: 'bg-[#7C4A03] text-[#FDE68A]',
+    trHeadYellow: 'bg-[#ebcb25] text-[#4A3200]',
+    // trHeadYellow: 'bg-[#7C4A03] text-[#FDE68A]',
+    // trHeadYellow: 'bg-[#ffe600] text-[#FDE68A]', - SAME W REMARK
     // trHeadYellow: 'bg-[#A16207] text-[#FFFBEB]',
     tableHover: 'hover:bg-[#1E293B]',
     clearText: 'text-[#94A3B8]',
