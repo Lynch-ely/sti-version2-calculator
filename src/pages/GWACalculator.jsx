@@ -852,7 +852,6 @@ export default function GWACalculator() {
                       {/* <button className={`${theme.overlayClose} text-xl`} onClick={onClose}>
                         <IoClose />
                       </button> */}
-                      
                   </div>
               </div>
               <div className={`flex flex-col mt-15 space-y-3 p-5`}>
@@ -959,7 +958,7 @@ export default function GWACalculator() {
                       </div>
                       <div className=''>
                           <h5 className={`${theme.overlayTitle} text-xs md:text-sm font-medium `}>Enter Semesters GWA</h5>
-                          <p className={`text-xs md:text-sm ${theme.overlaySubtitle}`}>Enter the GWA you received for each individual semester.</p>
+                          <p className={`text-xs md:text-sm ${theme.overlaySubtitle}`}>Enter the GWA you received for each semester.</p>
                       </div>
                   </div>
                   <div className={`flex gap-5`}>
