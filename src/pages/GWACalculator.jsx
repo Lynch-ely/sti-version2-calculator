@@ -667,7 +667,7 @@ export default function GWACalculator() {
                             className={`w-4/5 h-11 border rounded-lg text-center placeholder:text-center placeholder:text-base placeholder:font-normal leading-11 px-0 py-0 outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none font-semibold ${theme.border}`}
                           />
                         </td>
-                        <td className="pr-10 md:md:pr-0">
+                        <td className="pr-3 md:md:pr-0">
                           <MdDeleteOutline
                             onClick={() => {
                               if(semesters.length > 1){
