@@ -7,6 +7,8 @@ import { FaAngleDown } from "react-icons/fa";
 import { HiInformationCircle } from "react-icons/hi";
 import { MdDeleteOutline } from "react-icons/md";
 import { MdAddCircleOutline } from "react-icons/md";
+import { IoClose } from "react-icons/io5";
+import { MdOutlineTipsAndUpdates } from "react-icons/md";
 import confetti from "canvas-confetti";
 import Footer from "./Footer";
 
@@ -315,11 +317,11 @@ export default function GWACalculator() {
       const grade = parseFloat(sem.gradeGWA);
       if(isNaN(grade)) return false;
       
-      if (admittedYear === '2022'){
+      if (cumulativeAdmittedYear === '2022'){
         return grade > 2.25 && grade < 82.50;
-      }else if(admittedYear === '2024'){
+      }else if(cumulativeAdmittedYear === '2024'){
         return grade > 2.25 && grade < 81.50;
-      }else if(admittedYear === '2025'){
+      }else if(cumulativeAdmittedYear === '2025'){
         return grade > 2.00 && grade < 81.50;
       }
       return false;
@@ -348,7 +350,6 @@ export default function GWACalculator() {
     }else{
       feedbackText = `You need at least ${admittedYear === '2025' ? '2.00' : '2.25'} to qualify for Latin Honors.`;
     }
-
     setCumulativeFeedback(feedbackText);
   }
 
@@ -392,6 +393,12 @@ export default function GWACalculator() {
     fb: 'bg-[#1E293B]/50 backdrop-blur-lg border border-[#ebcb25]/80 text-[#FEF3C7] shadow-md shadow-yellow-500/10',
     // fb: 'bg-[#EBCB25]/10 backdrop-blur-md border border-[#EBCB25]/30 text-[#FEF3C7]',
     footerText: 'text-[#f5f5f5]',
+    overlay: 'bg-[#020817]/70 backdrop-blur-sm',
+    overlayHeader: 'text-[#F8FAFC]',
+    overlayTitle: 'text-[#F8FAFC]',
+    overlaySubTitle: 'text-[#E2E8F0]',
+    overlayClose: 'text-[#94A3B8] hover:text-[#F8FAFC]',
+    overlayNumber: 'bg-[#2563EB] text-[#F8FAFC]',
   }
   :
   {
@@ -422,8 +429,20 @@ export default function GWACalculator() {
     ring: 'border-[#ff1744] ring-2 ring-[#ffb4c3]',
     fb: 'bg-[#FFF8DC] border border-[#EAB308] text-[#6B4F00]',
     footerText: 'text-[#0072bc]',
+    overlay: 'bg-[#0F172A66]',
+    overlayHeader: 'text-[#242F49]',
+    overlayTitle: 'text-[#242F49]',
+    overlaySubTitle: 'text-[#6B7280]',
+    overlayClose: 'text-[#6B7280] hover:text-[#242F49]',
+    overlayNumber: 'bg-[#0072BC] text-[#F8FAFC]',
   };
 
+  const [isGWAModalOpen, setIsGWAModalOpen] = useState(false);
+
+  const toggleGWAModal = () => {
+    setIsGWAModalOpen(!isGWAModalOpen);
+  }
+ 
   return (
     <div className={`min-h-screen font-inter p-5 sm:p-0 ${theme.text} ${theme.bg} transition-all ease-in-out duration-300`}>
         <div className="max-w-2xl mx-auto space-y-3 md:space-y-6 md:pt-10">
@@ -510,7 +529,7 @@ export default function GWACalculator() {
                   <div className="flex items-center gap-1 w-auto md:gap-2 whitespace-nowrap">
                     <h5 className={`font-medium text-xs md:text-sm whitespace-nowrap ${theme.courseGWAText}`}>Final Grade:</h5>
                     <input
-                    type="number"
+                    type="text"
                     value={gwaData.percentage}
                     placeholder="0.0"
                     readOnly
@@ -522,7 +541,7 @@ export default function GWACalculator() {
                   </div>
                 </div>
                 <input
-                  type="number"
+                  type="text"
                   placeholder="--"
                   value={gwaData.scale}
                   readOnly
@@ -549,7 +568,7 @@ export default function GWACalculator() {
             <div className={`${theme.card} rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-5 space-y-3 mt-3`}>
               <div className="flex justify-between">
                 <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Calculate your gwa:</h1>
-                <HiInformationCircle className={`text-xl hover:cursor-pointer hover:scale-110 transition-gpu duration-200 ${theme.infoIcon}`} /> 
+                <HiInformationCircle className={`text-xl hover:cursor-pointer hover:scale-110 transition-gpu duration-200 ${theme.infoIcon}`} onClick={toggleGWAModal} /> 
               </div>
               <div className="flex flex-col gap-3 text-center max-h-77 md:max-h-110 overflow-hidden overflow-y-auto ">
                 <table className="rounded-lg">
@@ -806,7 +825,101 @@ export default function GWACalculator() {
           </div>
           <Footer className={`${theme.footerText}`}></Footer>
         </div>
+        
+        <GWAModal isOpen={isGWAModalOpen} onClose={toggleGWAModal} theme={theme} />
     </div>
   )
-}
+  }
 
+
+  function GWAModal({ isOpen, onClose, theme}) {
+    if(!isOpen) return null;
+    return (
+      <div className='min-h-screen w-full flex items-center justify-center fixed z-50'>
+        <div className={`${theme.overlay} w-full h-full top-0 left-0 right-0 bottom-0 fixed flex items-center justify-center font-inter tracking-wide px-3`}>
+          <div className={`relative ${theme.card} max-w-2xl w-full h-auto rounded-lg`}>
+              <div className='border-b-2 border-gray flex justify-between absolute w-full left-0 '>
+                  <div className='p-5 flex justify-between w-full'>
+                      <h1 className={`${theme.overlayHeader} font-semibold text-sm md:text-base`}>How to Calculate your Semester GWA</h1>
+                      {/* <button className={`${theme.overlayClose} text-xl`} onClick={onClose}>
+                        <IoClose />
+                      </button> */}
+                      
+                  </div>
+              </div>
+              <div className={`flex flex-col mt-15 space-y-3 p-5`}>
+                  <div className={`flex gap-5`}>
+                      <div className={`${theme.overlayNumber} w-8 h-8 rounded-full flex justify-center items-center font-semibold`}>
+                          <h1 className={`${theme.overlayText} `}>1</h1>
+                      </div>
+                      <div className=''>
+                          <h5 className={`${theme.overlayTitle} text-xs md:text-sm font-medium `}>Select Admission Year</h5>
+                          <p className={`text-xs md:text-sm ${theme.overlaySubtitle}`}>Make sure to select your correct admission year to accurately evaluate your eligibility for the Dean's List or President's List.</p>
+                      </div>
+                  </div>
+                  <div className={`flex gap-5`}>
+                      <div className={`${theme.overlayNumber} w-8 h-8 rounded-full flex justify-center items-center font-semibold`}>
+                          <h1 className={`${theme.overlayText}`}>2</h1>
+                      </div>
+                      <div className=''>
+                          <h5 className={`${theme.overlayTitle} text-xs md:text-sm font-medium `}>Enter Your Grades</h5>
+                          <p className={`text-xs md:text-sm ${theme.overlaySubTitle}`}>Enter the final grade you received for each subject/course.</p>
+                      </div>
+                  </div>
+                  <div className={`flex gap-5`}>
+                      <div className={`${theme.overlayNumber} w-8 h-8 rounded-full flex justify-center items-center font-semibold`}>
+                          <h1 className={`${theme.overlayText}`}>3</h1>
+                      </div>
+                      <div className=''>
+                          <h5 className={`${theme.overlayTitle} text-xs md:text-sm font-medium `}>Find and Enter Your Course Units</h5>
+                          <ul className={`text-xs md:text-sm ${theme.overlaySubtitle}`}>
+                              <li className={`text-xs md:text-sm`}>• Log in to One STI Portal.</li>
+                              <li className={`text-xs md:text-sm`}>• Click the menu icon.</li>
+                              <li className={`text-xs md:text-sm`}>• Select Program Curriculum.</li>
+                              <li className={`text-xs md:text-sm`}>• Look for you current subjects and check the units for each course.</li>
+                              <li className={`text-xs md:text-sm`}>• Input the units</li>
+                          </ul>
+                      </div>
+                  </div>
+                  <div className={`flex gap-5`}>
+                      <div className={`${theme.overlayNumber} w-8 h-8 rounded-full flex justify-center items-center font-semibold`}>
+                          <h1 className={`${theme.overlayText}`}>4</h1>
+                      </div>
+                      <div className=''>
+                          <h5 className={`${theme.overlayTitle} text-xs md:text-sm font-medium `}>Add Course</h5>
+                          <p className={`text-xs md:text-sm ${theme.overlaySubtitle}`}>Click + ADD COURSE if you need to input more subjects for the semester.</p>
+                      </div>
+                  </div>
+                  <div className={`flex gap-5`}>
+                      <div className={`${theme.overlayNumber} w-8 h-8 rounded-full flex justify-center items-center font-semibold`}>
+                          <h1 className={`${theme.overlayText}`}>5</h1>
+                      </div>
+                      <div className=''>
+                         <h5 className={`${theme.overlayTitle} text-xs md:text-sm font-medium `}>Remove Course</h5>
+                          <p className={`text-xs md:text-sm`}>Click the trash button beside each row to remove a subject.</p>
+                      </div>
+                  </div>
+                  <div className={`flex gap-5`}>
+                      <div className={`${theme.overlayNumber} w-8 h-8 rounded-full flex justify-center items-center font-semibold`}>
+                          <h1 className={`${theme.overlayText}`}>6</h1>
+                      </div>
+                      <div className=''>
+                          <h5 className={`${theme.overlayTitle} text-xs md:text-sm font-medium `}>Get Your Results</h5>
+                          <p className={`text-xs md:text-sm ${theme.overlaySubtitle}`}>Once all fields are filled, click the CALCULATE button to see your GWA!</p>
+                      </div>
+                  </div>
+                  <div className={`w-full flex`}>
+                      <div className={`flex gap-3 py-3 px-3 rounded-lg ${theme.trHeadYellow}`}>
+                          <div className='text-base md:text-xl'><MdOutlineTipsAndUpdates /></div>
+                          <div className=''>
+                              <h5 className='text-xs md:text-sm'><span>Tip: </span>Expand GRADES EQUIVALENT at the bottom of the screen to check the descriptive grading scale.</h5>
+                          </div>
+                      </div>
+                  </div>
+                  <button className={`rounded-lg bg-blue-500 text-white py-3 font-bold text-xs md:text-sm`} onClick={onClose}>GOT IT</button>
+              </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
