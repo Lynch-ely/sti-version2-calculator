@@ -561,7 +561,7 @@ export default function GWACalculator() {
           {/* SEMESTER GWA */}
           <section className={`${activeNav === 'GWA' ? 'block' : 'hidden'} font-hanken`}>
             <div className={`rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-3 space-y-2 md:mb-5 ${theme.card}`}>
-              <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Admission Academic Year</h1>
+              <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Academic Year</h1>
               <select defaultValue="" className={`select w-full border focus:outline-none ${theme.card} ${hasCalculationError ? `${theme.ring}` : `${theme.borderDivision}`}`} 
               onChange={(e) => {
               setAdmittedYear(e.target.value);
@@ -666,7 +666,7 @@ export default function GWACalculator() {
           {/* CUMULATIVE GWA */}
           <section className={`${activeNav === 'Cumulative GWA' ? 'block' : 'hidden'} font-hanken`}>
             <div className={`rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-3 space-y-2 md:mb-5 ${theme.card}`}>
-              <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Admission Academic Year</h1>
+              <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Academic Year</h1>
               <select defaultValue="" className={`select w-full border focus:outline-none ${theme.card} ${hasError ? `${theme.ring}` : `${theme.borderDivision}`}`} onChange={(e) => setCumulativeAdmittedYear(e.target.value)}>
                 <option value='' disabled hidden>--Select Admission Year--</option> 
                 <option value='2022'>A.Y. 2022-2023 and 2023-2024</option>
