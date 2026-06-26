@@ -369,8 +369,8 @@ export default function GWACalculator() {
     text: 'text-[#F8FAFC]',
     courseGWAText: 'text-[#F8FAFC]',
     trHeadBlue: 'bg-[#2563EB] text-[#F8FAFC]',
-    // trHeadYellow: 'bg-[#7C4A03] text-[#FDE68A]',
-    trHeadYellow: 'bg-[#A16207] text-[#FFFBEB]',
+    trHeadYellow: 'bg-[#7C4A03] text-[#FDE68A]',
+    // trHeadYellow: 'bg-[#A16207] text-[#FFFBEB]',
     tableHover: 'hover:bg-[#1E293B]',
     clearText: 'text-[#94A3B8]',
     clearButton: 'bg-[#1E293B] text-[#E2E8F0] hover:bg-[#273449]',
@@ -523,8 +523,8 @@ export default function GWACalculator() {
           {/* GWA */}
           <section className={`${activeNav === 'GWA' ? 'block' : 'hidden'} font-hanken`}>
             <div className={`rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-3 space-y-2 md:mb-5 ${theme.card}`}>
-              <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Admitted Academic Year</h1>
-              <select defaultValue="" className={`select w-full border focus:outline-none ${theme.card} ${hasCalculationError ? 'border-[#ff1744] ring-2 ring-[#ffb4c3]' : `${theme.borderDivision}`} transition-all duration-200`} 
+              <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Admission Academic Year</h1>
+              <select defaultValue="" className={`select w-full border focus:outline-none ${theme.card} ${hasCalculationError ? 'border-[#ff1744] ring-2 ring-[#ffb4c3]' : `${theme.borderDivision}`}`} 
               onChange={(e) => {
               setAdmittedYear(e.target.value);
               setHasCalculationError(false);
@@ -626,9 +626,9 @@ export default function GWACalculator() {
           </section>
           
           {/* CUMULATIVE GWA */}
-          <section className={`${activeNav === 'Cumulative GWA' ? 'block' : 'hidden'}`}>
+          <section className={`${activeNav === 'Cumulative GWA' ? 'block' : 'hidden'} font-hanken`}>
             <div className={`rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-3 space-y-2 md:mb-5 ${theme.card}`}>
-              <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Admitted Academic Year</h1>
+              <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Admission Academic Year</h1>
               <select defaultValue="" className={`select w-full border focus:outline-none ${theme.card} ${hasError ? 'border-[#ff1744] ring-2 ring-[#ffb4c3]' : `${theme.borderDivision}`}`} onChange={(e) => setAdmittedYear(e.target.value)}>
                 <option value='' disabled hidden>--Select Admission Year--</option> 
                 <option value='2022'>A.Y. 2022-2023 and 2023-2024</option>
