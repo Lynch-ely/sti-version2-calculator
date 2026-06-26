@@ -895,7 +895,7 @@ export default function GWACalculator() {
                       </div>
                       <div className=''>
                           <h5 className={`${theme.overlayTitle} text-xs md:text-sm font-medium `}>Add Course</h5>
-                          <p className={`text-xs md:text-sm ${theme.overlaySubtitle}`}>Click + ADD COURSE if you need to input more subjects for the semester.</p>
+                          <p className={`text-xs md:text-sm ${theme.overlaySubtitle}`}>Click <span className="font-semibold">+ ADD SEMESTER</span> if you need to input more subjects for the semester.</p>
                       </div>
                   </div>
                   <div className={`flex gap-5`}>
@@ -904,7 +904,7 @@ export default function GWACalculator() {
                       </div>
                       <div className=''>
                          <h5 className={`${theme.overlayTitle} text-xs md:text-sm font-medium `}>Remove Course</h5>
-                          <p className={`text-xs md:text-sm ${theme.overlaySubtitle}`}>Click the trash button beside each row to remove a subject.</p>
+                          <p className={`text-xs md:text-sm ${theme.overlaySubtitle}`}>Click the trash icon beside each row to remove a subject.</p>
                       </div>
                   </div>
                   <div className={`flex gap-5`}>
@@ -912,8 +912,8 @@ export default function GWACalculator() {
                           <h1 className={`${theme.overlayText}`}>6</h1>
                       </div>
                       <div className=''>
-                          <h5 className={`${theme.overlayTitle} text-xs md:text-sm font-medium `}>Get Your Results</h5>
-                          <p className={`text-xs md:text-sm ${theme.overlaySubtitle}`}>Once all fields are filled, click the CALCULATE button to see your GWA!</p>
+                          <h5 className={`${theme.overlayTitle} text-xs md:text-sm font-medium`}>Get Your Results</h5>
+                          <p className={`text-xs md:text-sm ${theme.overlaySubtitle}`}>Once all fields are filled, click the <span className="font-semibold text-">CALCULATE</span> button to see your GWA!</p>
                       </div>
                   </div>
                   <div className={`w-full flex`}>
@@ -977,7 +977,7 @@ export default function GWACalculator() {
                       </div>
                       <div className=''>
                          <h5 className={`${theme.overlayTitle} text-xs md:text-sm font-medium `}>Remove Semester</h5>
-                          <p className={`text-xs md:text-sm ${theme.overlaySubtitle}`}>Click the trash button beside each row to remove a semester.</p>
+                          <p className={`text-xs md:text-sm ${theme.overlaySubtitle}`}>Click the trash icon beside each row to remove a semester.</p>
                       </div>
                   </div>
                   <div className={`flex gap-5`}>
