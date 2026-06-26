@@ -6,9 +6,9 @@ function Footer(){
                 target="_blank" 
                 rel="noreferrer" 
                 className="relative pb-1 text-[#0072bc] font-semibold text-xs sm:text-sm uppercase tracking-wider
-                after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-center 
+                after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-center 
                 after:scale-x-0 after:bg-[#0072bc] after:transition-transform after:duration-300 
-                after:pointer-events-none hover:after:scale-x-100">Renelyn Enson</a>
+                after:pointer-events-none hover:after:scale-x-100">ELY</a>
             </div>
         </section>
     )

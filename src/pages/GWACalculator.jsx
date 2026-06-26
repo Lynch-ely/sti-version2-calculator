@@ -369,7 +369,8 @@ export default function GWACalculator() {
     text: 'text-[#F8FAFC]',
     courseGWAText: 'text-[#F8FAFC]',
     trHeadBlue: 'bg-[#2563EB] text-[#F8FAFC]',
-    trHeadYellow: 'bg-[#7C4A03] text-[#FDE68A]',
+    // trHeadYellow: 'bg-[#7C4A03] text-[#FDE68A]',
+    trHeadYellow: 'bg-[#A16207] text-[#FFFBEB]',
     tableHover: 'hover:bg-[#1E293B]',
     clearText: 'text-[#94A3B8]',
     clearButton: 'bg-[#1E293B] text-[#E2E8F0] hover:bg-[#273449]',
@@ -381,6 +382,7 @@ export default function GWACalculator() {
     navActive: 'bg-[#2563EB] text-[#F8FAFC]',
     navInactive: 'text-[#94A3B8]',
     navHover: 'hover:bg-[#1E293B]',
+    placeholder: "placeholder:text-[#94A3B8]",
   }
   :
   {
@@ -402,14 +404,16 @@ export default function GWACalculator() {
     courseGWAText: 'text-[#242F49]',
     infoIcon: 'text-[#6B7280] hover:text-[#0072bc]',
     add: 'bg-slate-200',
-    navActive: 'bg-[#004481] text-[#F8FAFC]',
+    // navActive: 'bg-[#004481] text-[#F8FAFC]',
+    navActive: 'bg-[#0072bc] text-[#f5f5f5]',
     navInactive: 'text-[#414751]',
     navHover: 'hover:bg-[#E5E7EB]',
+    placeholder: "placeholder:text-[#9CA3AF]",
   };
 
   // gwaBorder: 'border-[#c1c6d3] focus:border-[#0b4471] text-[#1c1a27]',
   return (
-    <div className={`min-h-screen font-inter p-5 sm:p-0 ${theme.text} ${theme.bg}`}>
+    <div className={`min-h-screen font-inter p-5 sm:p-0 ${theme.text} ${theme.bg} transition-all ease-in-out duration-300`}>
         <div className="max-w-2xl mx-auto space-y-3 md:space-y-6 md:pt-10">
           {/* HEADER */}
           <div className="flex justify-center items-center w-full relative shadow-[0_20px_50px_rgba(0,0,0,0.03)] ">
@@ -417,7 +421,7 @@ export default function GWACalculator() {
 
             {/* TOGGLE SWITCH */}
             <div className={`absolute right-0 text-xl ${activeSwitch ? '' : 'text-black'}`}>
-              <button onClick={toggleSwitch} className="cursor-pointer">
+              <button onClick={toggleSwitch} className={`cursor-pointer`}>
                 {activeSwitch ? <MdOutlineLightMode/> : <MdOutlineDarkMode/>}
               </button>
             </div>
@@ -430,7 +434,7 @@ export default function GWACalculator() {
             onClick={() => setActiveNav('Course GWA')}>COURSE GWA</button>
             <button className= {`h-9 rounded-lg flex justify-center items-center md:text-sm whitespace-nowrap px-1 flex-1 text-[11px]
             ${activeNav==='GWA' ? theme.navActive : `${theme.navInactive} ${theme.navHover}`}`} 
-            onClick={() => setActiveNav('GWA')}>OVERALL GWA</button>
+            onClick={() => setActiveNav('GWA')}>SEMESTER GWA</button>
             <button className= {`h-9 rounded-lg flex justify-center items-center md:text-sm whitespace-nowrap px-1 flex-[1.2] text-[11px]
             ${activeNav==='Cumulative GWA' ? theme.navActive : `${theme.navInactive} ${theme.navHover}`}`}  
             onClick={() => setActiveNav('Cumulative GWA')}>CUMULATIVE GWA</button>
@@ -454,7 +458,7 @@ export default function GWACalculator() {
                   placeholder="--"
                   value={prelim}
                   onChange={(e) => handleGradeChange(e.target.value, setPrelim)}
-                  className={`border-none outline-none text-xl md:text-2xl font-bold [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${theme.border}`}
+                  className={`border-none outline-none text-xl md:text-2xl font-bold [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${theme.border} ${theme.placeholder}`}
                   ></input>
                 </div>
                 <div className={`flex flex-col rounded-lg p-3 border gap-1 ${theme.borderDivision}`}>
@@ -464,17 +468,17 @@ export default function GWACalculator() {
                   value={midterm}
                   onChange={(e) => handleGradeChange(e.target.value, setMidterm)}
                   placeholder="--"
-                  className={`border-none outline-none text-xl md:text-2xl font-bold [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${theme.border}`}
+                  className={`border-none outline-none text-xl md:text-2xl font-bold [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${theme.border} ${theme.placeholder}`}
                   ></input>
                 </div>
                 <div className={`flex flex-col rounded-lg p-3 border gap-1 ${theme.borderDivision}`}>
-                  <h5 className={`font-medium text-xs md:text-sm ${theme.courseGWAText}`}>Prefinals (20%)</h5>
+                  <h5 className={`font-medium text-xs md:text-sm ${theme.courseGWAText}`}>Pre-Final (20%)</h5>
                   <input
                   type="number"
                   placeholder="--"
                   value={prefinal}
                   onChange={(e) => handleGradeChange(e.target.value, setPrefinal)}
-                  className={`border-none outline-none text-xl md:text-2xl font-bold [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${theme.border}`}
+                  className={`border-none outline-none text-xl md:text-2xl font-bold [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${theme.border} ${theme.placeholder}`}
                   ></input>
                 </div>
                 <div className={`flex flex-col rounded-lg p-3 border gap-1 ${theme.borderDivision}`}>
@@ -484,7 +488,7 @@ export default function GWACalculator() {
                   placeholder="--"
                   value={finals}
                   onChange={(e) => handleGradeChange(e.target.value, setFinals)}
-                  className={`border-none outline-none text-xl md:text-2xl font-bold [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${theme.border}`}
+                  className={`border-none outline-none text-xl md:text-2xl font-bold [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${theme.border} ${theme.placeholder}`}
                   ></input>
                 </div>
               </div>
@@ -498,7 +502,7 @@ export default function GWACalculator() {
                     value={gwaData.percentage}
                     placeholder="0.0"
                     readOnly
-                    className="w-12 border-none outline-none text-shadow-mauve-900 font-semibold text-xs md:text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className={`w-12 border-none outline-none font-semibold text-xs md:text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${theme.placeholder}`}
                     ></input>
                   </div>
                   <div className="shrink-0 pl-2">
@@ -525,7 +529,7 @@ export default function GWACalculator() {
               setAdmittedYear(e.target.value);
               setHasCalculationError(false);
               }}>
-                <option value='' disabled hidden>--Select Admitted Academic Year--</option> 
+                <option value='' disabled hidden>--Select Admission Year--</option> 
                 <option value='2024'>A.Y. 2024 and Earlier</option>
                 <option value='2025'>A.Y. 2025-2026 Onwards</option>
               </select>
@@ -626,7 +630,7 @@ export default function GWACalculator() {
             <div className={`rounded-lg w-full shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-3 space-y-2 md:mb-5 ${theme.card}`}>
               <h1 className="text-xs font-inter font-medium uppercase tracking-wide">Admitted Academic Year</h1>
               <select defaultValue="" className={`select w-full border focus:outline-none ${theme.card} ${hasError ? 'border-[#ff1744] ring-2 ring-[#ffb4c3]' : `${theme.borderDivision}`}`} onChange={(e) => setAdmittedYear(e.target.value)}>
-                <option value='' disabled hidden>--Select Admitted Academic Year--</option> 
+                <option value='' disabled hidden>--Select Admission Year--</option> 
                 <option value='2022'>A.Y. 2022-2023 and 2023-2024</option>
                 <option value='2024'>A.Y. 2024-2025</option>
                 <option value='2025'>A.Y. 2025-2026 Onwards</option>
