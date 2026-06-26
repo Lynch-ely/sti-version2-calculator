@@ -383,6 +383,7 @@ export default function GWACalculator() {
     navInactive: 'text-[#94A3B8]',
     navHover: 'hover:bg-[#1E293B]',
     placeholder: "placeholder:text-[#94A3B8]",
+    calculateHover: 'hover:bg-[#7C4A03]/80',
   }
   :
   {
@@ -408,7 +409,8 @@ export default function GWACalculator() {
     navActive: 'bg-[#0072bc] text-[#f5f5f5]',
     navInactive: 'text-[#414751]',
     navHover: 'hover:bg-[#E5E7EB]',
-    placeholder: "placeholder:text-[#9CA3AF]",
+    placeholder: 'placeholder:text-[#9CA3AF]',
+    calculateHover: 'hover:bg-amber-300/80',
   };
 
   // gwaBorder: 'border-[#c1c6d3] focus:border-[#0b4471] text-[#1c1a27]',
@@ -579,7 +581,7 @@ export default function GWACalculator() {
                             className={`w-4/5 h-11 border rounded-lg text-center placeholder:text-center placeholder:text-base placeholder:font-normal leading-11 px-0 py-0 outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none font-semibold ${theme.border}`}
                           />
                         </td>
-                        <td>
+                        <td className="pr-2 md:md:pr-0">
                           <MdDeleteOutline
                             onClick={() => {
                               if(courses.length > 1){
@@ -611,7 +613,7 @@ export default function GWACalculator() {
                 </table>
               </div>
               <div className="gap-3 flex ">
-                <button className= {`w-full py-3 rounded-lg font-bold tracking-widest text-xs md:text-sm hover:bg-amber-300/80 ${theme.trHeadYellow}`} onClick={calculateOverallGWA}>
+                <button className= {`w-full py-3 rounded-lg font-bold tracking-widest text-xs md:text-sm ${theme.trHeadYellow} ${theme.calculateHover}`} onClick={calculateOverallGWA}>
                   CALCULATE
                 </button>
                 <button className={`w-2/3 py-3 rounded-lg font-bold tracking-widest text-xs md:text-sm ${theme.clearButton}`} onClick={clearAllCourses}>CLEAR ALL</button>
@@ -699,7 +701,7 @@ export default function GWACalculator() {
                 </table>
               </div>
               <div className="gap-3 flex ">
-                <button className={`w-full py-3 rounded-lg font-bold tracking-widest text-xs md:text-sm hover:bg-amber-300/80 ${theme.trHeadYellow}`} onClick={calculateCumulativeGWA}>
+                <button className={`w-full py-3 rounded-lg font-bold tracking-widest text-xs md:text-sm ${theme.trHeadYellow} ${theme.calculateHover}`} onClick={calculateCumulativeGWA}>
                   CALCULATE
                 </button>
                 <button className={`w-2/3 py-3 rounded-lg font-bold tracking-widest text-xs md:text-sm ${theme.clearButton}`} onClick={clearAllSemesters}>CLEAR ALL</button>
