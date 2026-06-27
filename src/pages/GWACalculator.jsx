@@ -372,9 +372,6 @@ export default function GWACalculator() {
     courseGWAText: 'text-[#F8FAFC]',
     trHeadBlue: 'bg-[#2563EB] text-[#F8FAFC]',
     trHeadYellow: 'bg-[#ebcb25] text-[#4A3200]',
-    // trHeadYellow: 'bg-[#7C4A03] text-[#FDE68A]',
-    // trHeadYellow: 'bg-[#ffe600] text-[#FDE68A]', - SAME W REMARK
-    // trHeadYellow: 'bg-[#A16207] text-[#FFFBEB]',
     tableHover: 'hover:bg-[#1E293B]',
     clearText: 'text-[#94A3B8]',
     clearButton: 'bg-[#1E293B] text-[#E2E8F0] hover:bg-[#273449] cursor-pointer',
@@ -389,9 +386,7 @@ export default function GWACalculator() {
     placeholder: "placeholder:text-[#94A3B8]",
     calculateHover: 'hover:bg-[#7C4A03]/80',
     ring: 'border-[#ff1744] ring-2 ring-[#ff1744]/20',
-    // fb: 'bg-[#201C11] border border-[#D4AF37]/40 text-[#FDE68A]',
     fb: 'bg-[#1E293B]/50 backdrop-blur-lg border border-[#ebcb25]/80 text-[#FEF3C7] shadow-md shadow-yellow-500/10',
-    // fb: 'bg-[#EBCB25]/10 backdrop-blur-md border border-[#EBCB25]/30 text-[#FEF3C7]',
     footerText: 'text-[#f5f5f5]',
     overlay: 'bg-[#020817]/80 backdrop-blur-sm',
     overlayHeader: 'text-[#F8FAFC]',
@@ -919,7 +914,7 @@ export default function GWACalculator() {
                       <div className={`flex gap-3 py-3 px-3 rounded-lg ${theme.fb}`}>
                           <div className='text-base md:text-xl'><MdOutlineTipsAndUpdates /></div>
                           <div className={``}>
-                              <h5 className='text-xs md:text-sm'><span>Tip: </span>Expand GRADES EQUIVALENT at the bottom of the screen to check the descriptive grading scale.</h5>
+                              <h5 className='text-xs md:text-sm'><span className="font-semibold">Tip: </span>Expand <span className="font-semibold">GRADES EQUIVALENT</span> at the bottom of the screen to check the descriptive grading scale.</h5>
                           </div>
                       </div>
                   </div>
